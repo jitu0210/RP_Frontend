@@ -9,6 +9,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register";
 import RequestDemo from "./pages/RequestDemo";
 import TechnicalSpec from "./pages/TechnicalSpec";
+import AnalogMeasurement from "./pages/AnalogMeasurement";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/request-demo" element={<RequestDemo />} />
             <Route path="/technical-specifications" element={<TechnicalSpec />} />
+            <Route path="/analog-data" element={<AnalogMeasurement />} />
           </Routes>
         </main>
         <Footer />
