@@ -70,7 +70,7 @@ const AnalogMeasurement = () => {
   const endpoints = {
     current: 'http://localhost:8000/api/analog/current',
     voltage: 'http://localhost:8000/api/analog/voltage',
-    frequency: 'http://localhost:8000/api/analog/freq',
+    frequency: 'http://localhost:8000/api/analog/frequency',
     phaseDifference: 'http://localhost:8000/api/analog/phase'
   };
 
