@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -6,16 +7,122 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [attempts, setAttempts] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  // Check for existing attempts and block status on component mount
+  useEffect(() => {
+    const storedAttempts = localStorage.getItem("loginAttempts");
+    const blockUntil = localStorage.getItem("blockUntil");
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Login attempted with:", { username, password, rememberMe });
+    if (storedAttempts) {
+      setAttempts(parseInt(storedAttempts));
+    }
+    
+    if (blockUntil) {
+      const now = new Date().getTime();
+      const blockUntilTime = parseInt(blockUntil);
+      
+      if (now < blockUntilTime) {
+        setIsBlocked(true);
+        const remaining = Math.ceil((blockUntilTime - now) / 1000 / 60);
+        setBlockTimeRemaining(remaining);
+        
+        // Set up a timer to update the remaining time
+        const timer = setInterval(() => {
+          const now = new Date().getTime();
+          if (now >= blockUntilTime) {
+            setIsBlocked(false);
+            setBlockTimeRemaining(0);
+            localStorage.removeItem("blockUntil");
+            localStorage.removeItem("loginAttempts");
+            clearInterval(timer);
+          } else {
+            const remaining = Math.ceil((blockUntilTime - now) / 1000 / 60);
+            setBlockTimeRemaining(remaining);
+          }
+        }, 60000); // Update every minute
+        
+        return () => clearInterval(timer);
+      } else {
+        localStorage.removeItem("blockUntil");
+        localStorage.removeItem("loginAttempts");
+      }
+    }
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (isBlocked) {
+      setErrorMessage(`Account is temporarily blocked. Please try again in ${blockTimeRemaining} minutes.`);
+      return;
+    }
+    
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await axios.post("https://rp-875v.onrender.com/api/auth/login", {
+        username,
+        password
+      });
+
+      // Login successful
+      console.log("Login successful:", response.data);
+      
+      // Reset attempts on successful login
+      localStorage.removeItem("loginAttempts");
+      setAttempts(0);
+      
+      // Handle successful login (redirect, store token, etc.)
+      if (rememberMe) {
+        // Store token in localStorage or cookies for persistent login
+        localStorage.setItem("authToken", response.data.token);
+      } else {
+        // Store token in sessionStorage for session-only login
+        sessionStorage.setItem("authToken", response.data.token);
+      }
+      
+      // Redirect user to dashboard or home page
+      // window.location.href = "/dashboard";
+      
+    } catch (error) {
+      console.error("Login error:", error);
+      
+      // Handle failed login attempt
+      const newAttempts = attempts + 1;
+      setAttempts(newAttempts);
+      localStorage.setItem("loginAttempts", newAttempts.toString());
+      
+      if (newAttempts >= 5) {
+        // Block the user for 15 minutes
+        const blockUntil = new Date().getTime() + 15 * 60 * 1000; // 15 minutes from now
+        localStorage.setItem("blockUntil", blockUntil.toString());
+        setIsBlocked(true);
+        setBlockTimeRemaining(15);
+        setErrorMessage("Too many failed attempts. Your account has been blocked for 15 minutes.");
+        
+        // Set up a timer to unblock after 15 minutes
+        setTimeout(() => {
+          setIsBlocked(false);
+          setAttempts(0);
+          setBlockTimeRemaining(0);
+          localStorage.removeItem("blockUntil");
+          localStorage.removeItem("loginAttempts");
+        }, 15 * 60 * 1000);
+      } else {
+        if (error.response && error.response.data && error.response.data.message) {
+          setErrorMessage(`Login failed: ${error.response.data.message}. ${5 - newAttempts} attempts remaining.`);
+        } else {
+          setErrorMessage(`Login failed. Please try again. ${5 - newAttempts} attempts remaining.`);
+        }
+      }
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -37,6 +144,11 @@ export default function LoginPage() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {errorMessage && (
+            <div className="bg-red-900 text-red-200 p-3 rounded-md text-sm">
+              {errorMessage}
+            </div>
+          )}
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">
@@ -54,6 +166,7 @@ export default function LoginPage() {
                   type="text"
                   autoComplete="username"
                   required
+                  disabled={isBlocked}
                   className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-md placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors bg-gray-700 text-white"
                   placeholder="Enter your username"
                   value={username}
@@ -77,6 +190,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
+                  disabled={isBlocked}
                   className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-600 rounded-md placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors bg-gray-700 text-white"
                   placeholder="Enter your password"
                   value={password}
@@ -87,6 +201,7 @@ export default function LoginPage() {
                     type="button"
                     className="h-5 w-5 text-gray-500 hover:text-gray-400 focus:outline-none"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={isBlocked}
                   >
                     {showPassword ? (
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -104,11 +219,28 @@ export default function LoginPage() {
             </div>
           </div>
 
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                disabled={isBlocked}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-600 rounded bg-gray-700"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
+                Remember me
+              </label>
+            </div>
+          </div>
+
           <div>
             <button
               type="submit"
-              disabled={isLoading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-700 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+              disabled={isLoading || isBlocked}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-700 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ${(isLoading || isBlocked) ? 'opacity-75 cursor-not-allowed' : ''}`}
             >
               {isLoading ? (
                 <>
