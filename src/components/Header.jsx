@@ -136,6 +136,14 @@ export default function Header() {
                       Disturbance Records (DR)
                     </span>
                   </button>
+                  <button 
+                    onClick={() => handleMoreOptionClick("events")}
+                    className="block w-full text-left px-4 py-3 text-sm hover:bg-gray-700/80 transition-all duration-300 border-b border-gray-700/50 last:border-b-0 group"
+                  >
+                    <span className="group-hover:translate-x-1 transition-transform duration-300 block">
+                      Events
+                    </span>
+                  </button>
                 </div>
               </div>
             )}
@@ -225,6 +233,12 @@ export default function Header() {
                     className="block w-full text-left py-2 px-4 rounded-md hover:bg-gray-700/80 transition-all duration-300 text-sm"
                   >
                     Disturbance Records (DR)
+                  </button>
+                  <button 
+                    onClick={() => handleMoreOptionClick("events")}
+                    className="block w-full text-left py-2 px-4 rounded-md hover:bg-gray-700/80 transition-all duration-300 text-sm"
+                  >
+                    Events
                   </button>
                 </div>
               )}

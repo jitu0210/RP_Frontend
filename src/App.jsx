@@ -10,6 +10,8 @@ import Register from "./pages/Register";
 import RequestDemo from "./pages/RequestDemo";
 import TechnicalSpec from "./pages/TechnicalSpec";
 import AnalogMeasurement from "./pages/AnalogMeasurement";
+import DR from "./pages/DR";
+import Events from "./pages/Events";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
             <Route path="/request-demo" element={<RequestDemo />} />
             <Route path="/technical-specifications" element={<TechnicalSpec />} />
             <Route path="/analog-data" element={<AnalogMeasurement />} />
+            <Route path="/disturbance" element={<DR />} />
+            <Route path="/events" element={<Events />} />
           </Routes>
         </main>
         <Footer />

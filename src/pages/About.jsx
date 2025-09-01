@@ -1,6 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function About() {
+
+  const navigate = useNavigate()
+
+  const handleRequestDemo = () => {
+    navigate("/request-demo");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4 sm:px-6 lg:px-20 py-12">
       <div className="max-w-6xl mx-auto">
@@ -148,7 +156,7 @@ export default function About() {
         {/* CTA Section */}
         <div className="text-center mt-16">
           <h3 className="text-2xl font-bold text-white mb-6">Ready to Transform Your Power Monitoring?</h3>
-          <button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-blue-500/30">
+          <button onClick={handleRequestDemo} className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-blue-500/30">
             Request a Demo
           </button>
         </div>
