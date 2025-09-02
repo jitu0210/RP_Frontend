@@ -96,7 +96,7 @@ export default function LoginPage() {
       
       // Redirect user to dashboard or home page after a brief delay
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        window.location.href = "/";
       }, 1500);
       
     } catch (error) {

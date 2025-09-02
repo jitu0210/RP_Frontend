@@ -10,15 +10,31 @@ export default function Header() {
   const navigate = useNavigate();
 
   const checkAuth = async () => {
-    const token = localStorage.getItem("token");
+    // Check both localStorage and sessionStorage for auth tokens
+    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+    
     if (!token) {
       setIsAuthenticated(false);
+      setUser(null);
       return;
     }
 
     try {
+      // If we have a stored user, use it immediately for better UX
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          setUser(userData);
+          setIsAuthenticated(true);
+        } catch (e) {
+          console.error("Error parsing user data:", e);
+        }
+      }
+
+      // Verify token with backend (optional - can be removed if not needed)
       const response = await axios.get(
-        "https://iat-backend-5h88.onrender.com/api/v1/user/verify-token",
+        "https://rp-875v.onrender.com/api/auth/verify",
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -26,15 +42,29 @@ export default function Header() {
       
       if (response.data.valid) {
         setIsAuthenticated(true);
-        setUser(response.data.user);
+        // Update user data if needed
+        if (response.data.user) {
+          setUser(response.data.user);
+          // Store updated user data
+          if (localStorage.getItem("authToken")) {
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+          } else {
+            sessionStorage.setItem("user", JSON.stringify(response.data.user));
+          }
+        }
       } else {
-        localStorage.removeItem("token");
+        // Token is invalid, clear storage
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("authToken");
+        sessionStorage.removeItem("user");
         setIsAuthenticated(false);
+        setUser(null);
       }
     } catch (err) {
-      localStorage.removeItem("token");
-      setIsAuthenticated(false);
       console.error("Token verification failed:", err);
+      // If verification fails, we'll still keep the user logged in based on stored token
+      // but you might want to handle this differently based on your requirements
     }
   };
 
@@ -52,16 +82,25 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
       if (token) {
+        // Call logout endpoint if available
         await axios.post(
-          "https://iat-backend-5h88.onrender.com/api/v1/user/logout",
+          "https://rp-875v.onrender.com/api/auth/logout",
           {},
           { headers: { Authorization: `Bearer ${token}` } }
-        );
+        ).catch(err => {
+          // Ignore errors if logout endpoint fails
+          console.log("Logout API call failed, but continuing with client-side logout");
+        });
       }
-      localStorage.removeItem("token");
+      
+      // Clear all auth data
+      localStorage.removeItem("authToken");
       localStorage.removeItem("user");
+      sessionStorage.removeItem("authToken");
+      sessionStorage.removeItem("user");
+      
       setIsAuthenticated(false);
       setUser(null);
       
@@ -197,22 +236,13 @@ export default function Header() {
           {isAuthenticated ? (
             <div className="flex items-center gap-4 ml-4">
               {user && (
-                <span className="text-blue-700 font-medium bg-blue-50 py-1 px-3 rounded-full text-sm border border-blue-100">
+                <span className="text-blue-700 font-medium bg-blue-50 py-1 px-3 rounded-md text-sm border border-blue-100">
                   Welcome, {user.username}
                 </span>
               )}
               <button
-                onClick={handleLoginClick}
-                className="bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center"
-              >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Logged In
-              </button>
-              <button
                 onClick={handleLogout}
-                className="bg-blue-800 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-900 transition-all duration-300 shadow-sm flex items-center"
+                className="bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center"
               >
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -334,17 +364,8 @@ export default function Header() {
                     </span>
                   )}
                   <button
-                    onClick={handleLoginClick}
-                    className="bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center justify-center"
-                  >
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Logged In
-                  </button>
-                  <button
                     onClick={() => { handleLogout(); setIsMenuOpen(false); }}
-                    className="bg-blue-800 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-900 transition-all duration-300 shadow-sm flex items-center justify-center"
+                    className="bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center justify-center"
                   >
                     <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
