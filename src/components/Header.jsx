@@ -127,7 +127,7 @@ export default function Header() {
             className="relative py-2 px-4 rounded-md group"
           >
             <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">About</span>
-            <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
+            <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
           </Link>
           
           <Link 
@@ -135,7 +135,7 @@ export default function Header() {
             className="relative py-2 px-4 rounded-md group"
           >
             <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">Contact</span>
-            <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
+            <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
           </Link>
           
           {/* More Options Dropdown */}
@@ -150,7 +150,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
-              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
+              <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
             </button>
             
             {isMoreOpen && (
