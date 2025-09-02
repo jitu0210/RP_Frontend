@@ -11,7 +11,7 @@ import bts20003Image from "../assets/bts-20003.jpeg";
 // Google Drive PDF URL (replace with your actual PDF link)
 const brochurePdfUrl = "https://drive.google.com/file/d/1jbviNPqUw_CksqXX6faaz7zGq9ykoS5P/view?usp=sharing";
 
-// SVG Icon Components
+// SVG Icon Components (with government-style colors)
 const LightningIcon = ({ className }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
     <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
@@ -145,12 +145,12 @@ export default function HeroPage() {
   useEffect(() => {
     const featureInterval = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % features.length);
-    }, 4000);
+    }, 5000);
     
     // Rotate through product images
     const imageInterval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
-    }, 2000);
+    }, 4000);
     
     return () => {
       clearInterval(featureInterval);
@@ -195,22 +195,22 @@ export default function HeroPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen flex flex-col bg-white text-gray-800">
       
       
       {/* Hero Section */}
-      <section className="flex flex-col lg:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-16 py-8 sm:py-12 lg:py-16 flex-grow">
+      <section className="flex flex-col lg:flex-row items-center justify-between gap-8 px-4 sm:px-6 lg:px-16 py-8 sm:py-12 lg:py-16 flex-grow border-b border-gray-200">
         {/* Left Content */}
         <div className="flex-1 max-w-2xl order-2 lg:order-1 mt-6 lg:mt-0">
-          <div className="inline-block bg-blue-800/40 text-blue-200 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-4 lg:mb-6 border border-blue-700/30">
+          <div className="inline-block bg-blue-100 text-blue-800 px-3 py-1 sm:px-4 sm:py-2 rounded text-xs sm:text-sm font-medium mb-4 lg:mb-6">
             Industry-Leading Power Solution
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 lg:mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 lg:mb-6 text-gray-900">
             Bus Transfer System 2000 <br />
-            <span className="text-blue-300 font-semibold text-2xl sm:text-3xl lg:text-4xl">by Aartech Solonics Limited</span>
+            <span className="text-blue-700 font-semibold text-2xl sm:text-3xl lg:text-4xl">Live monitoring system</span>
           </h1>
-          <p className="text-sm sm:text-base lg:text-lg text-gray-300 leading-relaxed mb-6 lg:mb-8">
-            The <span className="font-semibold text-white">Bus Transfer System
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed mb-6 lg:mb-8">
+            The <span className="font-semibold text-gray-900">Bus Transfer System
             2000 (BTS 2000)</span> is a state-of-the-art, intelligent, and
             fully automatic solution designed to ensure seamless power
             continuity during source changeovers in critical industrial and
@@ -219,19 +219,19 @@ export default function HeroPage() {
           <div className="flex flex-wrap gap-3 mb-8 lg:mb-10">
             <button 
               onClick={handleRequestDemo}
-              className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 bg-blue-700 hover:bg-blue-600 rounded-lg shadow-lg transition-all duration-300 hover:-translate-y-0.5 font-medium text-sm sm:text-base"
+              className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 bg-blue-700 hover:bg-blue-800 rounded transition-all duration-300 font-medium text-sm sm:text-base text-white shadow-sm"
             >
               Request a Demo
             </button>
             <button 
               onClick={handleDownloadBrochure}
-              className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 bg-transparent border border-blue-600 text-blue-300 hover:bg-blue-800/30 rounded-lg shadow-lg transition-all duration-300 hover:-translate-y-0.5 font-medium text-sm sm:text-base"
+              className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 bg-white border border-blue-600 text-blue-700 hover:bg-blue-50 rounded transition-all duration-300 font-medium text-sm sm:text-base shadow-sm"
             >
               Download Brochure
             </button>
             <button 
               onClick={handleContactSales}
-              className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 bg-transparent hover:text-blue-300 rounded-lg transition-all duration-300 hover:-translate-y-0.5 font-medium text-sm sm:text-base flex items-center"
+              className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 bg-transparent hover:text-blue-800 rounded transition-all duration-300 font-medium text-sm sm:text-base flex items-center text-blue-700"
             >
               Contact Sales
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 ml-1 sm:ml-2" viewBox="0 0 20 20" fill="currentColor">
@@ -241,22 +241,22 @@ export default function HeroPage() {
           </div>
           
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 border-t border-gray-700 pt-4 sm:pt-6">
-            <div className="transition-transform duration-300 hover:scale-105 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-blue-300">99.9%</div>
-              <div className="text-xs sm:text-sm text-gray-400 mt-1">Uptime</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 border-t border-gray-200 pt-4 sm:pt-6">
+            <div className="transition-all duration-300 text-center p-2 hover:bg-blue-50 rounded">
+              <div className="text-xl sm:text-2xl font-bold text-blue-800">99.9%</div>
+              <div className="text-xs sm:text-sm text-gray-600 mt-1">Uptime</div>
             </div>
-            <div className="transition-transform duration-300 hover:scale-105 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-blue-300">&lt;20ms</div>
-              <div className="text-xs sm:text-sm text-gray-400 mt-1">Transfer Time</div>
+            <div className="transition-all duration-300 text-center p-2 hover:bg-blue-50 rounded">
+              <div className="text-xl sm:text-2xl font-bold text-blue-800">&lt;20ms</div>
+              <div className="text-xs sm:text-sm text-gray-600 mt-1">Transfer Time</div>
             </div>
-            <div className="transition-transform duration-300 hover:scale-105 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-blue-300">500+</div>
-              <div className="text-xs sm:text-sm text-gray-400 mt-1">Installations</div>
+            <div className="transition-all duration-300 text-center p-2 hover:bg-blue-50 rounded">
+              <div className="text-xl sm:text-2xl font-bold text-blue-800">500+</div>
+              <div className="text-xs sm:text-sm text-gray-600 mt-1">Installations</div>
             </div>
-            <div className="transition-transform duration-300 hover:scale-105 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-blue-300">24/7</div>
-              <div className="text-xs sm:text-sm text-gray-400 mt-1">Support</div>
+            <div className="transition-all duration-300 text-center p-2 hover:bg-blue-50 rounded">
+              <div className="text-xl sm:text-2xl font-bold text-blue-800">24/7</div>
+              <div className="text-xs sm:text-sm text-gray-600 mt-1">Support</div>
             </div>
           </div>
         </div>
@@ -264,12 +264,12 @@ export default function HeroPage() {
         {/* Right Image Carousel */}
         <div className="flex-1 flex justify-center order-1 lg:order-2 w-full lg:w-auto">
           <div className="relative w-full max-w-md lg:max-w-lg">
-            <div className="relative overflow-hidden rounded-xl shadow-2xl border border-gray-700">
+            <div className="relative overflow-hidden rounded shadow-lg border border-gray-200">
               <div className="aspect-w-16 aspect-h-9">
                 <img
                   src={productImages[currentImageIndex]}
                   alt="Bus Transfer System 2000"
-                  className="object-cover w-full h-full transition-opacity duration-700 ease-in-out"
+                  className="object-cover w-full h-full transition-opacity duration-500 ease-in-out"
                   onError={() => setImageError(true)}
                 />
               </div>
@@ -277,7 +277,7 @@ export default function HeroPage() {
               {/* Navigation arrows */}
               <button 
                 onClick={goToPrevImage}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 sm:p-2 rounded-full transition-all duration-300 backdrop-blur-sm"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded transition-all duration-300 shadow-md"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -285,7 +285,7 @@ export default function HeroPage() {
               </button>
               <button 
                 onClick={goToNextImage}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 sm:p-2 rounded-full transition-all duration-300 backdrop-blur-sm"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded transition-all duration-300 shadow-md"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -297,15 +297,15 @@ export default function HeroPage() {
                 {productImages.map((_, index) => (
                   <button
                     key={index}
-                    className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-all duration-300 ${index === currentImageIndex ? 'bg-blue-400 w-4 sm:w-6' : 'bg-white/50'}`}
+                    className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-all duration-300 ${index === currentImageIndex ? 'bg-blue-600 w-4 sm:w-6' : 'bg-gray-400'}`}
                     onClick={() => setCurrentImageIndex(index)}
                   />
                 ))}
               </div>
             </div>
             
-            <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 bg-blue-900/90 backdrop-blur-sm p-2 sm:p-3 rounded-lg shadow-lg z-10 border border-blue-700/30">
-              <div className="text-xs sm:text-sm font-medium">Industry 4.0 Ready</div>
+            <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 bg-blue-800 p-2 sm:p-3 rounded shadow-lg z-10 border border-blue-700">
+              <div className="text-xs sm:text-sm font-medium text-white">Industry 4.0 Ready</div>
               <div className="text-xs text-blue-200">IoT Enabled</div>
             </div>
           </div>
@@ -313,38 +313,38 @@ export default function HeroPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-16 bg-gray-850 border-y border-gray-700">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-16 bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Advanced Features</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-gray-900">Advanced Features</h2>
             <div className="h-1 w-16 sm:w-20 bg-blue-600 mx-auto mb-3 sm:mb-4"></div>
-            <p className="text-gray-300 max-w-3xl mx-auto text-sm sm:text-base">
+            <p className="text-gray-600 max-w-3xl mx-auto text-sm sm:text-base">
               The BTS 2000 incorporates cutting-edge technology to deliver unmatched reliability and performance in critical power applications.
             </p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
             {/* Feature showcase */}
-            <div className="bg-gray-800/40 p-6 sm:p-8 rounded-xl border border-gray-700/50 shadow-lg">
+            <div className="bg-white p-6 sm:p-8 rounded-lg border border-gray-200 shadow-sm">
               <div className="flex items-center mb-4 sm:mb-6">
-                <div className="mr-4 sm:mr-5 bg-blue-900/30 p-2 sm:p-3 rounded-lg">{features[activeFeature].icon}</div>
-                <h3 className="text-lg sm:text-xl font-semibold">{features[activeFeature].title}</h3>
+                <div className="mr-4 sm:mr-5 bg-blue-100 p-2 sm:p-3 rounded text-blue-800">{features[activeFeature].icon}</div>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">{features[activeFeature].title}</h3>
               </div>
-              <p className="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">{features[activeFeature].description}</p>
+              <p className="text-gray-600 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">{features[activeFeature].description}</p>
               
               <div className="flex space-x-1.5 sm:space-x-2 mb-6 sm:mb-8">
                 {features.map((_, index) => (
                   <button
                     key={index}
-                    className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === activeFeature ? 'bg-blue-500 w-6 sm:w-8' : 'bg-gray-600 w-1.5 sm:w-2 hover:bg-gray-500'}`}
+                    className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === activeFeature ? 'bg-blue-600 w-6 sm:w-8' : 'bg-gray-300 w-1.5 sm:w-2 hover:bg-gray-400'}`}
                     onClick={() => setActiveFeature(index)}
                   />
                 ))}
               </div>
               
-              <div className="bg-gray-700/30 p-3 sm:p-4 rounded-lg border border-gray-600/30">
-                <div className="flex items-center text-xs sm:text-sm text-gray-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-green-400 mr-1.5 sm:mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <div className="bg-blue-50 p-3 sm:p-4 rounded border border-blue-100">
+                <div className="flex items-center text-xs sm:text-sm text-blue-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 mr-1.5 sm:mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   Certified for safety and performance
@@ -357,15 +357,15 @@ export default function HeroPage() {
               {features.map((feature, index) => (
                 <div 
                   key={index} 
-                  className={`p-4 sm:p-5 rounded-lg cursor-pointer transition-all duration-300 ${index === activeFeature ? 'bg-blue-900/30 border-l-4 border-blue-500 shadow-md' : 'bg-gray-800/30 hover:bg-gray-700/40'}`}
+                  className={`p-4 sm:p-5 rounded-lg cursor-pointer transition-all duration-300 ${index === activeFeature ? 'bg-blue-100 border-l-4 border-blue-600' : 'bg-white hover:bg-gray-50 border-l-4 border-transparent'} border border-gray-200 shadow-sm`}
                   onClick={() => setActiveFeature(index)}
                 >
                   <div className="flex items-center">
-                    <div className="mr-3 sm:mr-4 bg-blue-900/20 p-1.5 sm:p-2 rounded-md">{feature.icon}</div>
-                    <h3 className="font-medium text-sm sm:text-base">{feature.title}</h3>
+                    <div className="mr-3 sm:mr-4 bg-blue-100 p-1.5 sm:p-2 rounded text-blue-800">{feature.icon}</div>
+                    <h3 className="font-medium text-sm sm:text-base text-gray-900">{feature.title}</h3>
                   </div>
                   {index === activeFeature && (
-                    <p className="text-gray-300 text-xs sm:text-sm mt-2 sm:mt-3 ml-11 sm:ml-11">{feature.description}</p>
+                    <p className="text-gray-600 text-xs sm:text-sm mt-2 sm:mt-3 ml-11 sm:ml-11">{feature.description}</p>
                   )}
                 </div>
               ))}
@@ -375,12 +375,12 @@ export default function HeroPage() {
       </section>
 
       {/* Applications Section */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-16 bg-gray-900">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Industry Applications</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-gray-900">Industry Applications</h2>
             <div className="h-1 w-16 sm:w-20 bg-blue-600 mx-auto mb-3 sm:mb-4"></div>
-            <p className="text-gray-300 max-w-3xl mx-auto text-sm sm:text-base">
+            <p className="text-gray-600 max-w-3xl mx-auto text-sm sm:text-base">
               The BTS 2000 is designed for diverse applications where power continuity is critical to operations and safety.
             </p>
           </div>
@@ -389,13 +389,13 @@ export default function HeroPage() {
             {applications.map((app, index) => (
               <div 
                 key={index} 
-                className="bg-gray-800/40 p-4 sm:p-6 rounded-xl border border-gray-700/30 transition-all duration-300 hover:bg-gray-700/40 hover:-translate-y-1 hover:shadow-lg group"
+                className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 transition-all duration-300 hover:shadow-md hover:border-blue-200"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-900/30 rounded-lg flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3 sm:mb-4 text-blue-800">
                   {app.icon}
                 </div>
-                <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-blue-300 transition-colors duration-300">{app.title}</h3>
-                <p className="text-gray-300 text-xs sm:text-sm">{app.description}</p>
+                <h3 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3 text-gray-900">{app.title}</h3>
+                <p className="text-gray-600 text-xs sm:text-sm">{app.description}</p>
               </div>
             ))}
           </div>
@@ -403,22 +403,22 @@ export default function HeroPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-16 bg-gradient-to-r from-gray-800 to-gray-900 border-t border-gray-700">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-16 bg-blue-800 text-white">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Ready to Enhance Your Power System?</h2>
-          <p className="text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-10 text-sm sm:text-base">
+          <p className="text-blue-100 max-w-3xl mx-auto mb-6 sm:mb-10 text-sm sm:text-base">
             Speak with our experts to learn how the BTS 2000 can provide reliable power transfer solutions for your specific application.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <button 
               onClick={handleScheduleConsultation}
-              className="px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-3 bg-blue-700 hover:bg-blue-600 rounded-lg shadow-lg transition-all duration-300 hover:-translate-y-0.5 font-medium text-sm sm:text-base"
+              className="px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-3 bg-white text-blue-800 hover:bg-blue-50 rounded transition-all duration-300 font-medium text-sm sm:text-base shadow-sm"
             >
               Schedule a Consultation
             </button>
             <button 
               onClick={handleTechnicalSpecs}
-              className="px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-3 bg-transparent border border-gray-500 text-white hover:bg-gray-700/30 rounded-lg shadow-lg transition-all duration-300 hover:-translate-y-0.5 font-medium text-sm sm:text-base"
+              className="px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-3 bg-transparent border border-white text-white hover:bg-blue-700 rounded transition-all duration-300 font-medium text-sm sm:text-base shadow-sm"
             >
               Technical Specifications
             </button>
