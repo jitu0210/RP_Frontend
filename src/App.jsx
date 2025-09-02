@@ -12,6 +12,7 @@ import TechnicalSpec from "./pages/TechnicalSpec";
 import AnalogMeasurement from "./pages/AnalogMeasurement";
 import DR from "./pages/DR";
 import Events from "./pages/Events";
+import Services from "./pages/Services";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/analog-data" element={<AnalogMeasurement />} />
             <Route path="/disturbance" element={<DR />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/services" element={<Services />} />
           </Routes>
         </main>
         <Footer />

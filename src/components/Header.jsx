@@ -11,9 +11,11 @@ export default function Header() {
 
   const checkAuth = async () => {
     // Check both localStorage and sessionStorage for auth tokens
-    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
-    const storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
-    
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    const storedUser =
+      localStorage.getItem("user") || sessionStorage.getItem("user");
+
     if (!token) {
       setIsAuthenticated(false);
       setUser(null);
@@ -36,10 +38,10 @@ export default function Header() {
       const response = await axios.get(
         "https://rp-875v.onrender.com/api/auth/verify",
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       if (response.data.valid) {
         setIsAuthenticated(true);
         // Update user data if needed
@@ -70,43 +72,49 @@ export default function Header() {
 
   useEffect(() => {
     checkAuth();
-    
+
     // Listen for custom auth event to update state when login happens elsewhere
     const handleAuthChange = () => checkAuth();
-    window.addEventListener('authChange', handleAuthChange);
-    
+    window.addEventListener("authChange", handleAuthChange);
+
     return () => {
-      window.removeEventListener('authChange', handleAuthChange);
+      window.removeEventListener("authChange", handleAuthChange);
     };
   }, []);
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+      const token =
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken");
       if (token) {
         // Call logout endpoint if available
-        await axios.post(
-          "https://rp-875v.onrender.com/api/auth/logout",
-          {},
-          { headers: { Authorization: `Bearer ${token}` } }
-        ).catch(err => {
-          // Ignore errors if logout endpoint fails
-          console.log("Logout API call failed, but continuing with client-side logout");
-        });
+        await axios
+          .post(
+            "https://rp-875v.onrender.com/api/auth/logout",
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+          .catch((err) => {
+            // Ignore errors if logout endpoint fails
+            console.log(
+              "Logout API call failed, but continuing with client-side logout"
+            );
+          });
       }
-      
+
       // Clear all auth data
       localStorage.removeItem("authToken");
       localStorage.removeItem("user");
       sessionStorage.removeItem("authToken");
       sessionStorage.removeItem("user");
-      
+
       setIsAuthenticated(false);
       setUser(null);
-      
+
       // Dispatch event to notify other components
-      window.dispatchEvent(new Event('authChange'));
-      
+      window.dispatchEvent(new Event("authChange"));
+
       navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
@@ -118,18 +126,18 @@ export default function Header() {
       navigate("/login");
       return;
     }
-    
+
     // Navigate to appropriate route based on option
     const routes = {
       analog: "/analog-measurements",
       disturbance: "/disturbance-records",
-      events: "/events"
+      events: "/events",
     };
-    
+
     if (routes[option]) {
       navigate(routes[option]);
     }
-    
+
     setIsMoreOpen(false);
     setIsMenuOpen(false);
   };
@@ -147,91 +155,44 @@ export default function Header() {
   return (
     <header className="bg-white text-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="group hover:text-blue-700 transition-all duration-300 text-xl md:text-2xl font-bold flex items-center gap-2"
         >
           <div className="w-10 h-10 bg-blue-800 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-105 transition-transform">
             TS
           </div>
-          <span className="text-2xl text-blue-800 font-bold">
-            TransSync
-          </span>
+          <span className="text-2xl text-blue-800 font-bold">TransSync</span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1 text-base">
-          <Link 
-            to="/about" 
-            className="relative py-2 px-4 rounded-md group"
-          >
-            <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">About</span>
+          <Link to="/about" className="relative py-2 px-4 rounded-md group">
+            <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">
+              About
+            </span>
             <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
           </Link>
-          
-          <Link 
-            to="/contact" 
-            className="relative py-2 px-4 rounded-md group"
-          >
-            <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">Contact</span>
+
+          <Link to="/contact" className="relative py-2 px-4 rounded-md group">
+            <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">
+              Contact
+            </span>
             <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
           </Link>
-          
+
           {/* More Options Dropdown */}
-          <div className="relative">
-            <button 
-              onClick={() => setIsMoreOpen(!isMoreOpen)}
-              className="relative py-2 px-4 rounded-md group flex items-center"
-            >
-              <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">Services</span>
-              <span className={`ml-1 transition-transform duration-300 ${isMoreOpen ? 'rotate-180' : ''}`}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
-              <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
-            </button>
-            
-            {isMoreOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50">
-                <div className="py-2">
-                  <button 
-                    onClick={() => handleMoreOptionClick("analog")}
-                    className="block w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-all duration-300 border-b border-gray-100 last:border-b-0 group text-gray-700 flex items-center"
-                  >
-                    <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <span className="group-hover:text-blue-700 transition-colors duration-300 block">
-                      Analog Measurements
-                    </span>
-                  </button>
-                  <button 
-                    onClick={() => handleMoreOptionClick("disturbance")}
-                    className="block w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-all duration-300 border-b border-gray-100 last:border-b-0 group text-gray-700 flex items-center"
-                  >
-                    <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="group-hover:text-blue-700 transition-colors duration-300 block">
-                      Disturbance Records (DR)
-                    </span>
-                  </button>
-                  <button 
-                    onClick={() => handleMoreOptionClick("events")}
-                    className="block w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-all duration-300 border-b border-gray-100 last:border-b-0 group text-gray-700 flex items-center"
-                  >
-                    <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span className="group-hover:text-blue-700 transition-colors duration-300 block">
-                      Events
-                    </span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          <Link to="/services">
+            <div className="relative">
+              <button className="relative py-2 px-4 rounded-md group flex items-center">
+                <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">
+                  Services
+                </span>
+
+                <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
+              </button>
+            </div>
+          </Link>
 
           {isAuthenticated ? (
             <div className="flex items-center gap-4 ml-4">
@@ -244,8 +205,19 @@ export default function Header() {
                 onClick={handleLogout}
                 className="bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center"
               >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
                 </svg>
                 Logout
               </button>
@@ -255,8 +227,19 @@ export default function Header() {
               onClick={handleLoginClick}
               className="bg-blue-800 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-900 transition-all duration-300 shadow-sm ml-4 flex items-center"
             >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                />
               </svg>
               Login
             </button>
@@ -270,9 +253,21 @@ export default function Header() {
           aria-label="Toggle menu"
         >
           <div className="w-6 h-6 flex flex-col justify-center items-center relative">
-            <span className={`block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMenuOpen ? 'rotate-45 translate-y-1.5' : '-translate-y-1'}`}></span>
-            <span className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out mt-1.5 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-            <span className={`block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : 'translate-y-1'}`}></span>
+            <span
+              className={`block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
+                isMenuOpen ? "rotate-45 translate-y-1.5" : "-translate-y-1"
+              }`}
+            ></span>
+            <span
+              className={`block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out mt-1.5 ${
+                isMenuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            ></span>
+            <span
+              className={`block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
+                isMenuOpen ? "-rotate-45 -translate-y-1.5" : "translate-y-1"
+              }`}
+            ></span>
           </div>
         </button>
       </div>
@@ -282,73 +277,154 @@ export default function Header() {
         <nav className="md:hidden bg-white border-t border-gray-200">
           <ul className="flex flex-col gap-0 px-4 py-3 text-base">
             <li>
-              <Link 
-                to="/about" 
-                onClick={() => setIsMenuOpen(false)} 
+              <Link
+                to="/about"
+                onClick={() => setIsMenuOpen(false)}
                 className="block py-3 px-4 rounded-md hover:bg-blue-50 transition-all duration-300 border-b border-gray-200 text-gray-700 flex items-center"
               >
-                <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5 mr-2 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 About
               </Link>
             </li>
             <li>
-              <Link 
-                to="/contact" 
-                onClick={() => setIsMenuOpen(false)} 
+              <Link
+                to="/contact"
+                onClick={() => setIsMenuOpen(false)}
                 className="block py-3 px-4 rounded-md hover:bg-blue-50 transition-all duration-300 border-b border-gray-200 text-gray-700 flex items-center"
               >
-                <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                  className="w-5 h-5 mr-2 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
                 Contact
               </Link>
             </li>
             <li className="border-b border-gray-200">
-              <button 
+              <button
                 onClick={() => setIsMoreOpen(!isMoreOpen)}
                 className="flex items-center justify-between w-full py-3 px-4 rounded-md hover:bg-blue-50 transition-all duration-300 text-gray-700"
               >
                 <div className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                  <svg
+                    className="w-5 h-5 mr-2 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                    />
                   </svg>
                   <span>Services</span>
                 </div>
-                <span className={`transition-transform duration-300 ${isMoreOpen ? 'rotate-180' : ''}`}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <span
+                  className={`transition-transform duration-300 ${
+                    isMoreOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </span>
               </button>
-              
+
               {isMoreOpen && (
                 <div className="pl-10 mt-1 mb-2">
-                  <button 
+                  <button
                     onClick={() => handleMoreOptionClick("analog")}
                     className="block w-full text-left py-2 px-4 rounded-md hover:bg-blue-50 transition-all duration-300 text-sm border-b border-gray-100 text-gray-600 flex items-center"
                   >
-                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    <svg
+                      className="w-4 h-4 mr-2 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      />
                     </svg>
                     Analog Measurements
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleMoreOptionClick("disturbance")}
                     className="block w-full text-left py-2 px-4 rounded-md hover:bg-blue-50 transition-all duration-300 text-sm border-b border-gray-100 text-gray-600 flex items-center"
                   >
-                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-4 h-4 mr-2 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     Disturbance Records (DR)
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleMoreOptionClick("events")}
                     className="block w-full text-left py-2 px-4 rounded-md hover:bg-blue-50 transition-all duration-300 text-sm text-gray-600 flex items-center"
                   >
-                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <svg
+                      className="w-4 h-4 mr-2 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
                     </svg>
                     Events
                   </button>
@@ -364,22 +440,50 @@ export default function Header() {
                     </span>
                   )}
                   <button
-                    onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
                     className="bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-all duration-300 shadow-sm flex items-center justify-center"
                   >
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    <svg
+                      className="w-4 h-4 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
                     </svg>
                     Logout
                   </button>
                 </div>
               ) : (
                 <button
-                  onClick={() => { navigate("/login"); setIsMenuOpen(false); }}
+                  onClick={() => {
+                    navigate("/login");
+                    setIsMenuOpen(false);
+                  }}
                   className="bg-blue-800 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-900 transition-all duration-300 shadow-sm w-full flex items-center justify-center"
                 >
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                    />
                   </svg>
                   Login
                 </button>
