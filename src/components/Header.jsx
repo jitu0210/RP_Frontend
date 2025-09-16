@@ -180,6 +180,12 @@ export default function Header() {
             </span>
             <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
           </Link>
+          <Link to="/relay" className="relative py-2 px-4 rounded-md group">
+            <span className="relative text-lg font-medium z-10 hover:text-blue-700 transition-colors duration-300">
+              Relay
+            </span>
+            <span className="absolute bottom-0 left-2 w-0 h-0.5 bg-blue-700 transition-all duration-300 group-hover:w-4/5 group-hover:left-1/10"></span>
+          </Link>
 
           {/* More Options Dropdown */}
           <Link to="/services">
