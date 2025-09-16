@@ -13,6 +13,7 @@ import AnalogMeasurement from "./pages/AnalogMeasurement";
 import DR from "./pages/DR";
 import Events from "./pages/Events";
 import Services from "./pages/Services";
+import ModbusControlPanel from "./pages/ModbusControlPanel";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/disturbance" element={<DR />} />
             <Route path="/events" element={<Events />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/control-panel" element={<ModbusControlPanel />} />
           </Routes>
         </main>
         <Footer />
