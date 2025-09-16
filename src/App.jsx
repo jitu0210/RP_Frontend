@@ -35,7 +35,6 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/services" element={<Services />} />
             <Route path="/control-panel" element={<ModbusControlPanel />} />
-            <Route path="/bts-dashboard" element={<BTSDashboard />} />
           </Routes>
         </main>
         <Footer />

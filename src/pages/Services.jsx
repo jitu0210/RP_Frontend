@@ -69,7 +69,7 @@ export default function Services() {
     },
     {
       id: 4,
-      path: "control-panel",
+      path: "relay",
       title: "Control Panel",
       description: "Direct access to device controls with real-time monitoring and command execution.",
       icon: (
@@ -150,7 +150,7 @@ export default function Services() {
             Access the control panel for real-time device monitoring and command execution.
           </p>
           <button 
-            onClick={() => navigate("/control-panel")}
+            onClick={() => navigate("/relay")}
             className="px-8 py-3 bg-white text-indigo-600 font-medium rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 hover:scale-105 transform transition-transform"
           >
             Open Control Panel
