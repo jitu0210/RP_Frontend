@@ -67,6 +67,27 @@ export default function Services() {
         </svg>
       ),
     },
+    {
+      id: 4,
+      path: "control-panel",
+      title: "Control Panel",
+      description: "Direct access to device controls with real-time monitoring and command execution.",
+      icon: (
+        <svg
+          className="w-16 h-16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"
+          />
+        </svg>
+      ),
+    },
   ];
 
   const handleClick = (path) => {
@@ -89,7 +110,7 @@ export default function Services() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {servicesData.map((service) => (
             <div
               key={service.id}
@@ -123,13 +144,16 @@ export default function Services() {
           ))}
         </div>
         
-        <div className="text-center mt-16 bg-blue-600 rounded-2xl p-10 text-white">
-          <h3 className="text-2xl font-bold mb-4">Need assistance selecting the right service?</h3>
+        <div className="text-center mt-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-10 text-white">
+          <h3 className="text-2xl font-bold mb-4">Need direct control access?</h3>
           <p className="text-indigo-100 mb-6 max-w-2xl mx-auto">
-            Our team of experts is ready to help you choose the perfect solution for your specific needs.
+            Access the control panel for real-time device monitoring and command execution.
           </p>
-          <button className="px-8 py-3 bg-white text-indigo-600 font-medium rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 hover:scale-105 transform transition-transform">
-            Contact Our Experts
+          <button 
+            onClick={() => navigate("/control-panel")}
+            className="px-8 py-3 bg-white text-indigo-600 font-medium rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 hover:scale-105 transform transition-transform"
+          >
+            Open Control Panel
           </button>
         </div>
       </div>
