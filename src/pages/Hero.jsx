@@ -207,7 +207,7 @@ export default function HeroPage() {
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 lg:mb-6 text-gray-900">
             Bus Transfer System 2000 <br />
-            <span className="text-blue-700 font-semibold text-2xl sm:text-3xl lg:text-4xl">Live monitoring system</span>
+            <span className="text-blue-700 font-semibold text-2xl sm:text-3xl lg:text-4xl">Live monitoring & Control system</span>
           </h1>
           <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed mb-6 lg:mb-8">
             The <span className="font-semibold text-gray-900">Bus Transfer System
