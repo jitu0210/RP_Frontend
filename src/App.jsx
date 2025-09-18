@@ -34,7 +34,8 @@ function App() {
             <Route path="/disturbance" element={<DR />} />
             <Route path="/events" element={<Events />} />
             <Route path="/services" element={<Services />} />
-            <Route path="/control-panel" element={<ModbusControlPanel />} />
+            <Route path="/relay" element={<ModbusControlPanel />} />
+            <Route path="/dashboard" element={<BTSDashboard />} />
           </Routes>
         </main>
         <Footer />
