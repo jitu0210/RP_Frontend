@@ -621,8 +621,14 @@ const HeroPage = () => {
           <div className="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-xs font-semibold px-4 py-2 rounded-full mb-6">
             INDUSTRY-LEADING POWER SOLUTIONS
           </div>
+<<<<<<< HEAD
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">BTS-2000</span>: Intelligent Power Switching
+=======
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 lg:mb-6 text-gray-900">
+            Bus Transfer System 2000 <br />
+            <span className="text-blue-700 font-semibold text-2xl sm:text-3xl lg:text-4xl">Live monitoring & Control system</span>
+>>>>>>> 61fa2c1733aa59174ff7156f98036cce30f7592b
           </h1>
           <p className="max-w-2xl mx-auto text-lg sm:text-xl text-gray-300 mb-10">
             Advanced automatic transfer switch technology delivering 99.9% uptime for mission-critical operations worldwide.
