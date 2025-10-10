@@ -14,12 +14,17 @@ import DR from "./pages/DR";
 import Events from "./pages/Events";
 import Services from "./pages/Services";
 import ModbusControlPanel from "./pages/ModbusControlPanel";
+import ChatBot from "./pages/ChatBot";
 
 function App() {
   return (
     <Router>
       <div>
         <Header />
+        <div className="">
+         <ChatBot />
+
+        </div>
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Hero />} />
