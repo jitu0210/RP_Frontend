@@ -14,7 +14,7 @@ import DR from "./pages/DR";
 import Events from "./pages/Events";
 import Services from "./pages/Services";
 import ModbusControlPanel from "./pages/ModbusControlPanel";
-import BTSDashboard from "./pages/BTSDashboard";
+import PageNotFound from "./pages/PageNotFound"
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/services" element={<Services />} />
             <Route path="/relay" element={<ModbusControlPanel />} />
-            <Route path="/dashboard" element={<BTSDashboard />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </main>
         <Footer />
