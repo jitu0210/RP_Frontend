@@ -141,6 +141,7 @@ export default function Header() {
       analog: "/analog-measurements",
       disturbance: "/disturbance-records",
       events: "/events",
+      digital_inputs: "/digital-inputs",
     };
 
     const handleClick = () => {
@@ -264,6 +265,8 @@ export default function Header() {
                   <ServiceOption option="analog" label="Analog Measurements" icon={icons.analog} />
                   <ServiceOption option="disturbance" label="Disturbance Records (DR)" icon={icons.disturbance} />
                   <ServiceOption option="events" label="Events" icon={icons.events} />
+                  {/* FIXED: Changed from digital-inputs to digital_inputs */}
+                  <ServiceOption option="digital_inputs" label="Digital Inputs" icon={icons.events} />
                 </div>
               )}
             </div>
@@ -344,6 +347,8 @@ export default function Header() {
                     <ServiceOption option="analog" label="Analog Measurements" icon={icons.analog} mobile />
                     <ServiceOption option="disturbance" label="Disturbance Records (DR)" icon={icons.disturbance} mobile />
                     <ServiceOption option="events" label="Events" icon={icons.events} mobile />
+                    {/* FIXED: Changed from /digital-inputs to digital_inputs */}
+                    <ServiceOption option="digital_inputs" label="Digital Inputs" icon={icons.events} mobile />
                   </div>
                 )}
               </div>

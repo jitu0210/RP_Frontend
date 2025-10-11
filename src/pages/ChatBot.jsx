@@ -1,26 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-// So you now have a comprehensive FAQ with 128 questions about BTS-2000 covering:
-
-// Technical specifications
-
-// Installation and configuration
-
-// Operation and maintenance
-
-// Integration capabilities
-
-// Safety features
-
-// Application scenarios
-
-// Support and warranty
-
-// Pricing and licensing
-
-// And much more!
-
-
+// Your websiteData array remains the same...
 const websiteData =[
 {
   "question": "What is the maximum current rating for BTS-2000?",
@@ -153,6 +133,10 @@ const websiteData =[
   "answer": "Standard models are for non-hazardous locations; explosion-proof versions available on request."
 },
 {
+  "question": "what is bts ?",
+  "answer": "BTS stands for Battery Transfer Switch, a device used to manage and switch between multiple power sources."
+},
+{
   "question": "What is the weight of a typical BTS-2000 unit?",
   "answer": "Weight varies from 50kg to 200kg depending on the model and configuration."
 },
@@ -167,6 +151,14 @@ const websiteData =[
 {
   "question": "Can BTS-2000 be used with energy storage systems?",
   "answer": "Yes, integrates with battery storage systems for optimal energy management."
+},
+{
+  "question": "who develop this website ?",
+  "answer": "Frontend by AMAN TIWARY and backend by JITU KUMAR."
+},
+{
+  "question": "company name ?",
+  "answer": "AARTECH SOLONIC LIMITED ."
 },
 {
   "question": "What is the maximum frequency deviation tolerated?",
@@ -430,47 +422,80 @@ const websiteData =[
 }
 ];
 
-// ✅ Enhanced matching function with better accuracy
+// ✅ CORRECTED matching function with better accuracy
 const findBestAnswer = (userInput) => {
   const lowerInput = userInput.toLowerCase().trim();
+  
+  // Remove common question words and punctuation for better matching
+  const cleanInput = lowerInput.replace(/[^\w\s]/g, '')
+    .replace(/\b(what|how|when|where|why|can|does|is|are|the|a|an)\b/g, '')
+    .trim();
 
   // Exact match check
   const exactMatch = websiteData.find(item =>
-    item.question.toLowerCase() === lowerInput
+    item.question.toLowerCase().trim() === lowerInput
   );
   if (exactMatch) return exactMatch.answer;
 
-  // Partial match with question relevance
-  const partialMatch = websiteData.find(item =>
-    lowerInput.includes(item.question.toLowerCase().replace("?", "").trim()) ||
-    item.question.toLowerCase().includes(lowerInput)
-  );
-  if (partialMatch) return partialMatch.answer;
+  // Check if input contains key phrases from questions
+  const phraseMatch = websiteData.find(item => {
+    const questionKey = item.question.toLowerCase()
+      .replace(/[^\w\s]/g, '')
+      .replace(/\b(what|how|when|where|why|can|does|is|are|the|a|an)\b/g, '')
+      .trim();
+    
+    const keyPhrases = questionKey.split(' ').filter(word => word.length > 3);
+    return keyPhrases.some(phrase => cleanInput.includes(phrase)) || 
+           cleanInput.split(' ').some(word => questionKey.includes(word) && word.length > 3);
+  });
+  
+  if (phraseMatch) return phraseMatch.answer;
 
-  // Enhanced keyword scoring
-  const keywords = lowerInput.split(/\s+/).filter(word => word.length > 2);
+  // Enhanced keyword scoring with priority
+  const keywords = cleanInput.split(/\s+/).filter(word => word.length > 2);
+  
+  if (keywords.length === 0) {
+    return "Could you please provide more details about your question regarding BTS-2000?";
+  }
+
   let bestMatch = null;
   let highestScore = 0;
 
   websiteData.forEach(item => {
-    const questionWords = item.question.toLowerCase().split(/\s+/);
+    const questionText = item.question.toLowerCase();
     let score = 0;
 
     keywords.forEach(keyword => {
-      if (questionWords.some(qWord => qWord.includes(keyword) || keyword.includes(qWord))) {
-        score += 2;
-      } else if (item.question.toLowerCase().includes(keyword)) {
+      // Exact word match
+      if (questionText.includes(' ' + keyword + ' ') || 
+          questionText.startsWith(keyword + ' ') || 
+          questionText.endsWith(' ' + keyword)) {
+        score += 3;
+      }
+      // Partial word match
+      else if (questionText.includes(keyword)) {
         score += 1;
       }
     });
 
-    if (score > highestScore || (score === highestScore && bestMatch && item.question.length < bestMatch.question.length)) {
+    // Bonus for matching technical terms
+    const technicalTerms = ['bts-2000', 'voltage', 'current', 'power', 'transfer', 'relay', 'temperature', 'rating', 'specification'];
+    technicalTerms.forEach(term => {
+      if (cleanInput.includes(term) && questionText.includes(term)) {
+        score += 2;
+      }
+    });
+
+    if (score > highestScore) {
       highestScore = score;
       bestMatch = item;
     }
   });
 
-  if (bestMatch && highestScore >= 2) return bestMatch.answer;
+  // Only return if we have a reasonably good match
+  if (bestMatch && highestScore >= 2) {
+    return bestMatch.answer;
+  }
 
   // Contextual fallback responses
   const greetings = ["hello", "hi", "hey", "good morning", "good afternoon"];
@@ -488,9 +513,18 @@ const findBestAnswer = (userInput) => {
     return "Thank you for chatting! Feel free to reach out if you have more questions about BTS-2000.";
   }
 
-  return "I apologize, but I couldn't find a specific answer to your question. Could you please rephrase it or ask about BTS-2000 features, specifications, or support?";
+  // Improved fallback response
+  return `I want to make sure I give you the right information about BTS-2000. Could you please rephrase your question or ask about:
+  
+• Technical specifications
+• Installation and configuration  
+• Operation and maintenance
+• Pricing and licensing
+• Safety features
+• Or any specific feature you're interested in?`;
 };
 
+// Your ChatBot component remains exactly the same...
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -549,12 +583,12 @@ const ChatBot = () => {
   };
 
   const suggestedQuestions = [
-    "What is BTS-2000?",
-    "Key features?",
-    "Transfer time?",
-    "Support availability?",
-    "Pricing options?",
-    "Technical specs?"
+    "What is the maximum current rating for BTS-2000?",
+    "What is the operating temperature range?",
+    "How does BTS-2000 handle power quality issues?",
+    "What communication interfaces are available?",
+    "What is the typical delivery lead time?",
+    "What certifications does BTS-2000 hold?"
   ];
 
   const handleSuggestionClick = (question) => {

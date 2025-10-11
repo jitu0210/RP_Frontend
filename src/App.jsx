@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Hero from "./pages/Hero"
 import About from "./pages/About"
-import Contact from "./pages/Contact"
+import Contact from "../Contact"
 import Login from "./pages/Login"
 import Register from "./pages/Register";
 import RequestDemo from "./pages/RequestDemo";
@@ -17,6 +17,7 @@ import ModbusControlPanel from "./pages/ModbusControlPanel";
 import ChatBot from "./pages/ChatBot";
 // import BTSDashboard from "./pages/BTSDashboard";
 import PageNotFound from "./pages/PageNotFound"
+import Digital_inputs from "./pages/Digital_inputs";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/analog-data" element={<AnalogMeasurement />} />
             <Route path="/disturbance" element={<DR />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/digital-inputs" element={<Digital_inputs />} />
             <Route path="/services" element={<Services />} />
             <Route path="/relay" element={<ModbusControlPanel />} />
             <Route path="*" element={<PageNotFound />} />
