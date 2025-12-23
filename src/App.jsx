@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import Hero from "./pages/Hero"
 import About from "./pages/About"
 import Contact from "../Contact"
@@ -15,9 +15,9 @@ import Events from "./pages/Events";
 import Services from "./pages/Services";
 import ModbusControlPanel from "./pages/ModbusControlPanel";
 import ChatBot from "./pages/ChatBot";
-// import BTSDashboard from "./pages/BTSDashboard";
 import PageNotFound from "./pages/PageNotFound"
 import Digital_inputs from "./pages/Digital_inputs";
+import BinaryI from "./pages/Binary-input";
 
 function App() {
   return (
@@ -43,10 +43,11 @@ function App() {
             <Route path="/digital-inputs" element={<Digital_inputs />} />
             <Route path="/services" element={<Services />} />
             <Route path="/relay" element={<ModbusControlPanel />} />
+            <Route path="/binary-input" element={<BinaryI/>}/>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </Router>
   );
