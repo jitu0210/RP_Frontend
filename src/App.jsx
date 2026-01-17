@@ -18,6 +18,7 @@ import ChatBot from "./pages/ChatBot";
 import PageNotFound from "./pages/PageNotFound"
 import Digital_inputs from "./pages/Digital_inputs";
 import BinaryI from "./pages/Binary-input";
+import HistoryDownload from "./pages/HistoryDownload.jsx"
 
 function App() {
   return (
@@ -38,7 +39,8 @@ function App() {
             <Route path="/request-demo" element={<RequestDemo />} />
             <Route path="/technical-specifications" element={<TechnicalSpec />} />
             <Route path="/analog-data" element={<AnalogMeasurement />} />
-            <Route path="/disturbance" element={<DR />} />
+            <Route path="/history" element={<HistoryDownload />} />
+            <Route path="/dr" element={<DR />} />
             <Route path="/events" element={<Events />} />
             <Route path="/digital-inputs" element={<Digital_inputs />} />
             <Route path="/services" element={<Services />} />

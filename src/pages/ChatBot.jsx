@@ -430,7 +430,7 @@ const findBestAnswer = (userInput) => {
   const cleanInput = lowerInput.replace(/[^\w\s]/g, '')
     .replace(/\b(what|how|when|where|why|can|does|is|are|the|a|an)\b/g, '')
     .trim();
-
+ 
   // Exact match check
   const exactMatch = websiteData.find(item =>
     item.question.toLowerCase().trim() === lowerInput
