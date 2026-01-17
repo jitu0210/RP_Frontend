@@ -427,7 +427,7 @@ const HeroPage = () => {
   };
 
   const handleVideoError = () => {
-    console.error("Failed to load video:", heroVideo);
+    console.error("Failed to load video:", heroVideo); 
     setVideoError(true);
     setVideoLoaded(false);
   };
