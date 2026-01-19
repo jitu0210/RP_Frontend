@@ -331,11 +331,11 @@
 
 
 
-
+// ///////////////////////////////////////////////////////////////////////
 
 import React, { useState, useEffect } from "react";
 
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = "https://mqtt-testing-1.onrender.com";
 
 export default function BinaryIO() {
   const [activeTab, setActiveTab] = useState("inputs");
@@ -360,27 +360,68 @@ export default function BinaryIO() {
     localStorage.setItem('binaryio-theme', newMode ? 'dark' : 'light');
   };
 
-  // SSE Streams
+  // Single SSE Stream for both BI and BO
   useEffect(() => {
-    const biSource = new EventSource(`${API_BASE}/bts/streambi`);
-    const boSource = new EventSource(`${API_BASE}/bts/streambo`);
+    const source = new EventSource(`${API_BASE}/stream/bi-bo`);
 
-    biSource.onopen = () => setConnected(true);
-    biSource.onerror = () => setConnected(false);
+    source.onopen = () => setConnected(true);
+    source.onerror = () => setConnected(false);
 
-    biSource.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.bi) setBiSignals(data.bi);
-    };
-
-    boSource.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.bo) setBoSignals(data.bo);
+    source.onmessage = (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        
+        // Handle both BI and BO data from single stream
+        if (data.bi && Array.isArray(data.bi)) {
+          setBiSignals(data.bi);
+        }
+        
+        if (data.bo && Array.isArray(data.bo)) {
+          setBoSignals(data.bo);
+        }
+        
+        // Handle combined format if both are in one array
+        if (data.signals && Array.isArray(data.signals)) {
+          // Separate BI and BO signals
+          const bi = data.signals.filter(s => 
+            s.address && s.address.includes('I') || 
+            s.type === 'INPUT' || 
+            s.tag.toLowerCase().includes('input')
+          );
+          const bo = data.signals.filter(s => 
+            s.address && s.address.includes('O') || 
+            s.type === 'OUTPUT' || 
+            s.tag.toLowerCase().includes('output')
+          );
+          
+          if (bi.length > 0) setBiSignals(bi);
+          if (bo.length > 0) setBoSignals(bo);
+        }
+        
+        // Handle alternative format
+        if (data.data && Array.isArray(data.data)) {
+          const bi = [];
+          const bo = [];
+          
+          data.data.forEach(item => {
+            if (item.address && item.address.includes('I')) {
+              bi.push(item);
+            } else if (item.address && item.address.includes('O')) {
+              bo.push(item);
+            }
+          });
+          
+          if (bi.length > 0) setBiSignals(bi);
+          if (bo.length > 0) setBoSignals(bo);
+        }
+        
+      } catch (err) {
+        console.error("SSE parse error:", err);
+      }
     };
 
     return () => {
-      biSource.close();
-      boSource.close();
+      source.close();
     };
   }, []);
 
@@ -392,6 +433,7 @@ export default function BinaryIO() {
   };
 
   const getSignalType = (address) => {
+    if (!address) return 'UNKNOWN';
     if (address.includes('I')) return 'INPUT';
     if (address.includes('O')) return 'OUTPUT';
     if (address.includes('M')) return 'MEMORY';
@@ -494,8 +536,8 @@ export default function BinaryIO() {
   const data = activeTab === "inputs" ? biSignals : boSignals;
   const filtered = data.filter(
     (s) =>
-      s.tag.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.address.toLowerCase().includes(searchTerm.toLowerCase())
+      (s.tag && s.tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (s.address && s.address.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Statistics
@@ -634,15 +676,15 @@ export default function BinaryIO() {
               
               return (
                 <div
-                  key={s.address}
+                  key={s.address || s.tag}
                   className={`p-3 rounded border transition-all ${statusColor} ${isDarkMode ? 'hover:brightness-110' : 'hover:shadow-md'}`}
                 >
                   <div className="mb-2">
                     <div className={`text-xs font-medium truncate mb-1 ${gridCardText}`}>
-                      {formatName(s.tag)}
+                      {formatName(s.tag || 'Untagged')}
                     </div>
                     <div className={`text-[10px] font-mono ${gridCardAddressText} ${gridCardAddressBg} px-1.5 py-0.5 rounded`}>
-                      {s.address}
+                      {s.address || 'No Address'}
                     </div>
                   </div>
                   
@@ -680,14 +722,14 @@ export default function BinaryIO() {
                   
                   return (
                     <tr
-                      key={s.address}
+                      key={s.address || s.tag}
                       className={`border-b ${tableBorder} ${tableRowHover} ${tableRowBg(s.value)}`}
                     >
                       <td className="p-3">
-                        <div className="font-medium text-sm">{formatName(s.tag)}</div>
+                        <div className="font-medium text-sm">{formatName(s.tag || 'Untagged')}</div>
                       </td>
                       <td className="p-3">
-                        <div className="font-mono text-xs text-gray-400">{s.address}</div>
+                        <div className="font-mono text-xs text-gray-400">{s.address || 'No Address'}</div>
                       </td>
                       <td className="p-3">
                         <div className={`text-xs font-bold px-2 py-1 rounded inline-block ${typeBadge(type)}`}>
@@ -763,9 +805,13 @@ export default function BinaryIO() {
 
 
 
-// this is for mqtt live 
 
+
+
+// this is for mqtt live 
 // import React, { useEffect, useState } from "react";
+
+// /* ===== TAG LISTS (MATCH BACKEND EXACTLY) ===== */
 
 // const BI_TAGS = [
 //   "SOURCE_FAIL_1","SOURCE_FAIL_2","BTS_NOT_READY",
@@ -774,39 +820,52 @@ export default function BinaryIO() {
 //   "IC1_BREAKER_READY","BC_BREAKER_READY","IC2_BREAKER_READY",
 //   "IC1_PT_READY","IC2_PT_READY","BUS_A_PT_READY","BUS_B_PT_READY",
 //   "BREAKER_CONFIG_OK","BTS_IN","BTS_OUT","BTS_READY",
-//   "PERM_IL_OK","TRANSFER_LOCKOUT_OK","TEST_TRANSFER_OK","PREVIOUS_TRANSFER_OK",
+//   "PREM_IL_OK","TRANSFER_LOCKOUT_OK","TEST_TRANSFER_EXECUTED","PREVIOUS_TRANSFER_OK",
 //   "B1_S1_SELECTED","B1_S2_SELECTED","B2_S2_SELECTED","B2_S1_SELECTED",
-//   "B12_S1_SELECTED","B12_S2_SELECTED",
+//   "B1_2_TO_S1_SELECTED","B1_2_S2_SELECTED",
 //   "BKR1_CLOSED","BKR2_CLOSED","BKR3_CLOSED",
 //   "BKR1_OPEN","BKR2_OPEN","BKR3_OPEN",
 //   "IC1_TRIP_FAIL","IC1_CLOSE_FAIL","BC_TRIP_FAIL","BC_CLOSE_FAIL",
 //   "IC2_TRIP_FAIL","IC2_CLOSE_FAIL",
 //   "B1_S1_AVAILABLE","B1_S2_AVAILABLE","B2_S2_AVAILABLE","B2_S1_AVAILABLE",
-//   "B12_S1_AVAILABLE","B12_S2_AVAILABLE",
+//   "B1_2_TO_S1_AVAILABLE","B1_2_TO_S2_AVAILABLE",
 // ];
 
 // const BO_TAGS = [
 //   "IC1_TRIP","IC1_CLOSE","BC_TRIP","BC_CLOSE",
 //   "IC2_TRIP","IC2_CLOSE",
 //   "BUS1_MOTOR_TRIP","BUS2_MOTOR_TRIP",
-//   "CLOSING_SUPPLY","TEST_MODE_SELECT",
-//   "AUTO_TRANSFER_OK","FAST_MODE","FAST_SLOW_MODE",
-//   "FAST_INPHASE_SLOW","PARALLEL_MODE","SLOW_MODE",
+//   "CLOSING_SUPPLY_CONTROL","TEST_MODE_SELECT",
+//   "AUTO_PROTECTIVE_TRANSFER_SUCCESS",
+//   "FAST_MODE_SELECTED","FAST_SLOW_MODE_SELECTED",
+//   "FAST_IN_PHASE_SLOW_MODE_SELECTED",
+//   "SLOW_MODE_SELECTED","PARALLEL_MODE_SELECTED",
 // ];
 
+// /* ===== UTILITY ===== */
+// function arrayToMap(arr = []) {
+//   const map = {};
+//   for (const item of arr) {
+//     map[item.tag] = item.value; // boolean
+//   }
+//   return map;
+// }
+
+// /* ===== MAIN COMPONENT ===== */
 // export default function BIBOStreamUI() {
 //   const [bi, setBi] = useState({});
 //   const [bo, setBo] = useState({});
 //   const [lastUpdate, setLastUpdate] = useState(null);
 
 //   useEffect(() => {
-//     const source = new EventSource("http://localhost:8000/api/v1/bts/streambibo");
+//     const source = new EventSource("https://mqtt-testing-x4ct.onrender.com/stream/bi-bo");
 
 //     source.onmessage = (event) => {
-//       const data = JSON.parse(event.data);
-//       setBi(data.bi || {});
-//       setBo(data.bo || {});
-//       setLastUpdate(data.timestamp);
+//       const payload = JSON.parse(event.data);
+
+//       setBi(arrayToMap(payload.bi));
+//       setBo(arrayToMap(payload.bo));
+//       setLastUpdate(payload.timestamp);
 //     };
 
 //     source.onerror = (err) => {
@@ -820,7 +879,10 @@ export default function BinaryIO() {
 //   return (
 //     <div style={{ padding: 20 }}>
 //       <h2>BTS Binary I/O Status</h2>
-//       <p>Last update: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : "—"}</p>
+//       <p>
+//         Last update:{" "}
+//         {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : "—"}
+//       </p>
 
 //       <div style={{ display: "flex", gap: 30 }}>
 //         <StatusPanel title="Binary Inputs (BI)" tags={BI_TAGS} data={bi} />
@@ -830,10 +892,12 @@ export default function BinaryIO() {
 //   );
 // }
 
+// /* ===== STATUS PANEL ===== */
 // function StatusPanel({ title, tags, data }) {
 //   return (
 //     <div style={{ flex: 1 }}>
 //       <h3>{title}</h3>
+
 //       <table style={{ width: "100%", borderCollapse: "collapse" }}>
 //         <thead>
 //           <tr>
@@ -841,10 +905,11 @@ export default function BinaryIO() {
 //             <th style={th}>Status</th>
 //           </tr>
 //         </thead>
+
 //         <tbody>
 //           {tags.map((tag) => {
-//             const value = data?.[tag];
-//             const isOn = value === 1;
+//             const value = data[tag];
+//             const isOn = value === true;
 
 //             return (
 //               <tr key={tag}>
@@ -869,6 +934,7 @@ export default function BinaryIO() {
 //   );
 // }
 
+// /* ===== STYLES ===== */
 // const th = {
 //   border: "1px solid #444",
 //   padding: "8px",
