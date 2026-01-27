@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const API_BASE = "http://localhost:8000/api/v1";
 
@@ -157,26 +157,13 @@ export default function Login() {
 
               {/* Remember Me & Forgot Password */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-600"
-                  >
-                    Remember me
-                  </label>
-                </div>
-                <button
+              
+              <Link to="/admin-login"> <button
                   type="button"
                   className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200"
                 >
-                  Forgot password?
-                </button>
+                  Admin login→
+                </button></Link> 
               </div>
 
               {/* Submit Button */}

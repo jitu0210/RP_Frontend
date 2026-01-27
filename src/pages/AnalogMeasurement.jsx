@@ -359,7 +359,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const STREAM_URL = "https://mqtt-testing-1.onrender.com/api/analog/stream";
+const STREAM_URL = "https://mqtt-testing-1.onrender.com/api/v1/stream/analog";
 const MAX_POINTS = 40;
 const UPDATE_THROTTLE_MS = 200; // Match server's 200ms interval
 
@@ -855,7 +855,7 @@ export default function AnalogStream() {
             </div>
             <div className="flex items-center space-x-1">
               <div className="w-2 h-2 rounded-full bg-red-500"></div>
-              <span>CRITICAL (>±15%)</span>
+              <span>CRITICAL (&gt;±15%)</span>
             </div>
           </div>
           <div className="text-right">

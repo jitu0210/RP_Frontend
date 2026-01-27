@@ -362,7 +362,7 @@ export default function BinaryIO() {
 
   // Single SSE Stream for both BI and BO
   useEffect(() => {
-    const source = new EventSource(`${API_BASE}/stream/bi-bo`);
+    const source = new EventSource(`${API_BASE}/api/v1/stream/bi-bo`);
 
     source.onopen = () => setConnected(true);
     source.onerror = () => setConnected(false);

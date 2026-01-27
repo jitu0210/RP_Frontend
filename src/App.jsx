@@ -18,7 +18,10 @@ import ChatBot from "./pages/ChatBot";
 import PageNotFound from "./pages/PageNotFound"
 import Digital_inputs from "./pages/Digital_inputs";
 import BinaryI from "./pages/Binary-input";
-import HistoryDownload from "./pages/HistoryDownload.jsx"
+import HistoryDownload from "./pages/HistoryDownload.jsx";
+import Adminrelay from "./admin/Relay.jsx";
+import Adminlogin from "./admin/Adminlogin.jsx";
+import Userdatailrelay from "./admin/Userrelay_detail.jsx"
 
 function App() {
   return (
@@ -46,6 +49,10 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/relay" element={<ModbusControlPanel />} />
             <Route path="/binary-input" element={<BinaryI/>}/>
+            <Route path="/admin-relay" element={<Adminrelay/>}/>
+            <Route path="/admin-login" element={<Adminlogin/>}/>
+            <Route path="/admin-relaydetail" element={<Userdatailrelay/>}/>
+            <Route path="" element={<BinaryI/>}/>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </main>
