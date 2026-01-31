@@ -391,7 +391,7 @@
 //  the loggle button that have the dark and light mode
 
 
-import eact, { useEffect, useState, useRef } from "react";
+import React ,{ useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import heroVideo from "../assets/BSDT.mp4";
 import aartech from "../assets/aartech.jpg";

@@ -1269,7 +1269,7 @@ const actions = [
     buttons: [
       {
         label: "Operate Breaker",
-        endpoint: "/breaker/operate",
+        endpoint: "/api/v1/breaker/operate",
         color: "orange",
         type: "execute",
       },
@@ -1347,7 +1347,7 @@ export default function ModbusControlPanel() {
         addLog(`Direction armed: ${label}`, "ARMED");
         setArmedDirection(label);
         setLoading(false);
-        setTimeout(() => setActiveCommand(null), 100);
+        setTimeout(() => setActiveCommand(null), 200);
         return;
       }
 
@@ -1356,7 +1356,7 @@ export default function ModbusControlPanel() {
         if (!armedDirection) {
           addLog("Breaker blocked: No direction armed", "ERROR");
           setLoading(false);
-          setTimeout(() => setActiveCommand(null), 100);
+          setTimeout(() => setActiveCommand(null), 200);
           return;
         }
 
@@ -1373,7 +1373,7 @@ export default function ModbusControlPanel() {
         if (!armedButton) {
           addLog(`Error: Could not find armed direction endpoint`, "ERROR");
           setLoading(false);
-          setTimeout(() => setActiveCommand(null), 100);
+          setTimeout(() => setActiveCommand(null), 200);
           return;
         }
 
@@ -1405,7 +1405,7 @@ export default function ModbusControlPanel() {
         addLog(`Transfer complete: ${armedDirection}`, "SUCCESS");
         setArmedDirection(null);
         setLoading(false);
-        setTimeout(() => setActiveCommand(null), 100);
+        setTimeout(() => setActiveCommand(null), 200);
         return;
       }
 
@@ -1423,7 +1423,7 @@ export default function ModbusControlPanel() {
       addLog(`${label} failed: ${err.message}`, "ERROR");
     } finally {
       setLoading(false);
-      setTimeout(() => setActiveCommand(null), 100);
+      setTimeout(() => setActiveCommand(null), 200);
     }
   };
 
@@ -1656,7 +1656,7 @@ export default function ModbusControlPanel() {
                 setModeSseStatus("RECONNECTING");
                 connectModeSSE();
               }
-            }, 2000);
+            }, 2000);/////////////////////////////////////
           }
         };
       } catch (err) {
@@ -1670,7 +1670,7 @@ export default function ModbusControlPanel() {
               setModeSseStatus("RECONNECTING");
               connectModeSSE();
             }
-          }, 3000);
+          }, 3000);////////////////////////////////////////////
         }
       }
     };
