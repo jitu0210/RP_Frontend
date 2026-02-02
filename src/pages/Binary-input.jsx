@@ -335,7 +335,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const API_BASE = "https://mqtt-testing-1.onrender.com";
+const API_BASE = "https://mqtt-testing-2.onrender.com";
 
 export default function BinaryIO() {
   const [activeTab, setActiveTab] = useState("inputs");

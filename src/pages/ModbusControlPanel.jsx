@@ -1127,7 +1127,7 @@
 
 import { useEffect, useState, useRef } from "react";
 
-const API_BASE = "https://mqtt-testing-1.onrender.com";
+const API_BASE = "https://mqtt-testing-2.onrender.com";
 
 /* ---------------- DATA STRUCTURES ---------------- */
 const actions = [

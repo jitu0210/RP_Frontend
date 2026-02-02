@@ -359,7 +359,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const STREAM_URL = "https://mqtt-testing-1.onrender.com/api/v1/stream/analog";
+const STREAM_URL = "https://mqtt-testing-2.onrender.com/api/v1/stream/analog";
 const MAX_POINTS = 40;
 const UPDATE_THROTTLE_MS = 200; // Match server's 200ms interval
 
