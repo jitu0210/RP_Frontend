@@ -573,11 +573,12 @@ const HeroPage = () => {
               playsInline
               preload="none"
               poster="/hero.jpg"
-              className={`absolute w-full h-full object-cover ${
-                videoLoaded ? "opacity-100" : "opacity-0"
-              }`}
+              // className={`absolute w-full h-full object-cover ${
+              //   videoLoaded ? "opacity-100" : "opacity-0"
+              // }`}
               onLoadedData={handleVideoLoad}
-              onError={handleVideoError}
+              // onError={handleVideoError}
+               className="absolute w-full h-full object-cover"
             >
               <source src={heroVideo} type="video/mp4" />
               {/* Your browser does not support the video tag. */}
