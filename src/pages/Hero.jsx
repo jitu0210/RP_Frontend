@@ -571,7 +571,8 @@ const HeroPage = () => {
               loop
               muted
               playsInline
-              preload="metadata"
+              preload="none"
+              poster="/hero.jpg"
               className={`absolute w-full h-full object-cover ${
                 videoLoaded ? "opacity-100" : "opacity-0"
               }`}
@@ -579,13 +580,13 @@ const HeroPage = () => {
               onError={handleVideoError}
             >
               <source src={heroVideo} type="video/mp4" />
-              Your browser does not support the video tag.
+              {/* Your browser does not support the video tag. */}
             </video>
           ) : (
             <div className={`absolute inset-0 ${themeClasses.videoFallback}`} />
           )}
 
-          {/* Loading state */}
+          {/* Loading state */} 
           {!videoLoaded && !videoError && (
             <div className={`absolute inset-0 flex items-center justify-center ${themeClasses.loadingOverlay}`}>
               <div className="text-center">
