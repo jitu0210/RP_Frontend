@@ -452,8 +452,10 @@ export default function BinaryIO() {
         (isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300');
     }
     return value ? 
-      (isDarkMode ? 'bg-purple-900 border-purple-500' : 'bg-purple-100 border-purple-400') : 
-      (isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300');
+      // (isDarkMode ? 'bg-purple-900 border-purple-500' : 'bg-purple-100 border-purple-400') : 
+      // (isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300');
+      (isDarkMode ? 'bg-blue-900 border-blue-500' : 'bg-green-300 border-blue-400') : 
+      (isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-300');
   };
 
   const getStatusText = (value, type) => {
@@ -467,7 +469,7 @@ export default function BinaryIO() {
   };
 
   // Theme-based classes
-  const bgClass = isDarkMode ? "bg-gray-900" : "bg-gray-100";
+  const bgClass = isDarkMode ? "bg-gray-900" : "bg-gray-300";
   const textClass = isDarkMode ? "text-gray-200" : "text-gray-800";
   const cardBgClass = isDarkMode ? "bg-gray-800" : "bg-white";
   const cardBorderClass = isDarkMode ? "border-gray-700" : "border-gray-300";
@@ -804,144 +806,700 @@ export default function BinaryIO() {
 
 
 
+// import React, { useState, useEffect } from "react";
 
+// const API_BASE = "https://mqtt-testing-2.onrender.com";
 
-
-
-// this is for mqtt live 
-// import React, { useEffect, useState } from "react";
-
-// /* ===== TAG LISTS (MATCH BACKEND EXACTLY) ===== */
-
-// const BI_TAGS = [
-//   "SOURCE_FAIL_1","SOURCE_FAIL_2","BTS_NOT_READY",
-//   "IC1_CLOSE_CKT","IC1_TRIP_CKT","BC_CLOSE_CKT","BC_TRIP_CKT",
-//   "IC2_CLOSE_CKT","IC2_TRIP_CKT",
-//   "IC1_BREAKER_READY","BC_BREAKER_READY","IC2_BREAKER_READY",
-//   "IC1_PT_READY","IC2_PT_READY","BUS_A_PT_READY","BUS_B_PT_READY",
-//   "BREAKER_CONFIG_OK","BTS_IN","BTS_OUT","BTS_READY",
-//   "PREM_IL_OK","TRANSFER_LOCKOUT_OK","TEST_TRANSFER_EXECUTED","PREVIOUS_TRANSFER_OK",
-//   "B1_S1_SELECTED","B1_S2_SELECTED","B2_S2_SELECTED","B2_S1_SELECTED",
-//   "B1_2_TO_S1_SELECTED","B1_2_S2_SELECTED",
-//   "BKR1_CLOSED","BKR2_CLOSED","BKR3_CLOSED",
-//   "BKR1_OPEN","BKR2_OPEN","BKR3_OPEN",
-//   "IC1_TRIP_FAIL","IC1_CLOSE_FAIL","BC_TRIP_FAIL","BC_CLOSE_FAIL",
-//   "IC2_TRIP_FAIL","IC2_CLOSE_FAIL",
-//   "B1_S1_AVAILABLE","B1_S2_AVAILABLE","B2_S2_AVAILABLE","B2_S1_AVAILABLE",
-//   "B1_2_TO_S1_AVAILABLE","B1_2_TO_S2_AVAILABLE",
-// ];
-
-// const BO_TAGS = [
-//   "IC1_TRIP","IC1_CLOSE","BC_TRIP","BC_CLOSE",
-//   "IC2_TRIP","IC2_CLOSE",
-//   "BUS1_MOTOR_TRIP","BUS2_MOTOR_TRIP",
-//   "CLOSING_SUPPLY_CONTROL","TEST_MODE_SELECT",
-//   "AUTO_PROTECTIVE_TRANSFER_SUCCESS",
-//   "FAST_MODE_SELECTED","FAST_SLOW_MODE_SELECTED",
-//   "FAST_IN_PHASE_SLOW_MODE_SELECTED",
-//   "SLOW_MODE_SELECTED","PARALLEL_MODE_SELECTED",
-// ];
-
-// /* ===== UTILITY ===== */
-// function arrayToMap(arr = []) {
-//   const map = {};
-//   for (const item of arr) {
-//     map[item.tag] = item.value; // boolean
-//   }
-//   return map;
-// }
-
-// /* ===== MAIN COMPONENT ===== */
-// export default function BIBOStreamUI() {
-//   const [bi, setBi] = useState({});
-//   const [bo, setBo] = useState({});
-//   const [lastUpdate, setLastUpdate] = useState(null);
+// export default function BinaryIO() {
+//   const [activeTab, setActiveTab] = useState("inputs");
+//   const [viewMode, setViewMode] = useState("grid");
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [connected, setConnected] = useState(false);
+//   const [biSignals, setBiSignals] = useState([]);
+//   const [boSignals, setBoSignals] = useState([]);
+//   const [isDarkMode, setIsDarkMode] = useState(true);
+//   const [lastUpdate, setLastUpdate] = useState(new Date());
+//   const [selectedSignal, setSelectedSignal] = useState(null);
 
 //   useEffect(() => {
-//     const source = new EventSource("https://mqtt-testing-x4ct.onrender.com/stream/bi-bo");
-
-//     source.onmessage = (event) => {
-//       const payload = JSON.parse(event.data);
-
-//       setBi(arrayToMap(payload.bi));
-//       setBo(arrayToMap(payload.bo));
-//       setLastUpdate(payload.timestamp);
-//     };
-
-//     source.onerror = (err) => {
-//       console.error("SSE error", err);
-//       source.close();
-//     };
-
-//     return () => source.close();
+//     const savedTheme = localStorage.getItem('binaryio-theme');
+//     if (savedTheme === 'light') {
+//       setIsDarkMode(false);
+//     }
 //   }, []);
 
-//   return (
-//     <div style={{ padding: 20 }}>
-//       <h2>BTS Binary I/O Status</h2>
-//       <p>
-//         Last update:{" "}
-//         {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : "—"}
-//       </p>
+//   const toggleTheme = () => {
+//     const newMode = !isDarkMode;
+//     setIsDarkMode(newMode);
+//     localStorage.setItem('binaryio-theme', newMode ? 'dark' : 'light');
+//   };
 
-//       <div style={{ display: "flex", gap: 30 }}>
-//         <StatusPanel title="Binary Inputs (BI)" tags={BI_TAGS} data={bi} />
-//         <StatusPanel title="Binary Outputs (BO)" tags={BO_TAGS} data={bo} />
+//   // Single SSE Stream for both BI and BO
+//   useEffect(() => {
+//     const source = new EventSource(`${API_BASE}/api/v1/stream/bi-bo`);
+
+//     source.onopen = () => {
+//       setConnected(true);
+//       setLastUpdate(new Date());
+//     };
+    
+//     source.onerror = () => setConnected(false);
+
+//     source.onmessage = (e) => {
+//       try {
+//         const data = JSON.parse(e.data);
+//         setLastUpdate(new Date());
+        
+//         if (data.bi && Array.isArray(data.bi)) {
+//           setBiSignals(data.bi);
+//         }
+        
+//         if (data.bo && Array.isArray(data.bo)) {
+//           setBoSignals(data.bo);
+//         }
+        
+//         if (data.signals && Array.isArray(data.signals)) {
+//           const bi = data.signals.filter(s => 
+//             s.address && s.address.includes('I') || 
+//             s.type === 'INPUT' || 
+//             s.tag.toLowerCase().includes('input')
+//           );
+//           const bo = data.signals.filter(s => 
+//             s.address && s.address.includes('O') || 
+//             s.type === 'OUTPUT' || 
+//             s.tag.toLowerCase().includes('output')
+//           );
+          
+//           if (bi.length > 0) setBiSignals(bi);
+//           if (bo.length > 0) setBoSignals(bo);
+//         }
+        
+//         if (data.data && Array.isArray(data.data)) {
+//           const bi = [];
+//           const bo = [];
+          
+//           data.data.forEach(item => {
+//             if (item.address && item.address.includes('I')) {
+//               bi.push(item);
+//             } else if (item.address && item.address.includes('O')) {
+//               bo.push(item);
+//             }
+//           });
+          
+//           if (bi.length > 0) setBiSignals(bi);
+//           if (bo.length > 0) setBoSignals(bo);
+//         }
+        
+//       } catch (err) {
+//         console.error("SSE parse error:", err);
+//       }
+//     };
+
+//     return () => {
+//       source.close();
+//     };
+//   }, []);
+
+//   // Helper functions
+//   const formatName = (tag) => {
+//     if (!tag) return 'Untagged Signal';
+//     return tag
+//       .replace(/_/g, " ")
+//       .replace(/\b\w/g, l => l.toUpperCase())
+//       .replace(/DI\s*/i, 'Digital Input ')
+//       .replace(/DO\s*/i, 'Digital Output ');
+//   };
+
+//   const getSignalType = (address, tag) => {
+//     if (!address && !tag) return 'UNKNOWN';
+//     if (address && address.includes('I')) return 'INPUT';
+//     if (address && address.includes('O')) return 'OUTPUT';
+//     if (tag && tag.toLowerCase().includes('input')) return 'INPUT';
+//     if (tag && tag.toLowerCase().includes('output')) return 'OUTPUT';
+//     return 'INTERNAL';
+//   };
+
+//   const formatAddress = (address) => {
+//     if (!address) return 'N/A';
+//     // Format as %IX0.0 or %QX0.0 style
+//     if (address.includes('I')) return `%IX${address.replace('I', '')}`;
+//     if (address.includes('O')) return `%QX${address.replace('O', '')}`;
+//     return address;
+//   };
+
+//   const formatTime = (date) => {
+//     return date.toLocaleTimeString('en-US', { 
+//       hour12: true, 
+//       hour: '2-digit', 
+//       minute: '2-digit',
+//       second: '2-digit'
+//     });
+//   };
+
+//   // Statistics
+//   const data = activeTab === "inputs" ? biSignals : boSignals;
+//   const filtered = data.filter(
+//     (s) =>
+//       (s.tag && s.tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
+//       (s.address && s.address.toLowerCase().includes(searchTerm.toLowerCase()))
+//   );
+
+//   const activeCount = filtered.filter((s) => s.value).length;
+//   const inactiveCount = filtered.length - activeCount;
+//   const inputCount = biSignals.length;
+//   const outputCount = boSignals.length;
+//   const totalSignals = inputCount + outputCount;
+
+//   // Signal Details Modal
+//   const SignalDetailsModal = () => {
+//     if (!selectedSignal) return null;
+    
+//     const type = getSignalType(selectedSignal.address, selectedSignal.tag);
+//     const status = selectedSignal.value ? 'ACTIVE' : 'INACTIVE';
+//     const value = selectedSignal.value ? '1 (TRUE)' : '0 (FALSE)';
+    
+//     return (
+//       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+//         <div className={`w-full max-w-md rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'} shadow-2xl`}>
+//           {/* Header */}
+//           <div className={`p-6 border-b ${isDarkMode ? 'border-gray-700 bg-gray-900/50' : 'border-gray-200 bg-gray-50'}`}>
+//             <div className="flex items-center justify-between">
+//               <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+//                 Signal Details
+//               </h3>
+//               <button
+//                 onClick={() => setSelectedSignal(null)}
+//                 className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`}
+//               >
+//                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+//                 </svg>
+//               </button>
+//             </div>
+//           </div>
+          
+//           {/* Content */}
+//           <div className="p-6 space-y-6">
+//             {/* Signal Status */}
+//             <div className="flex items-center justify-center">
+//               <div className={`w-32 h-32 rounded-full flex items-center justify-center ${selectedSignal.value 
+//                 ? (isDarkMode ? 'bg-green-900/30 border-4 border-green-500' : 'bg-green-100 border-4 border-green-400')
+//                 : (isDarkMode ? 'bg-gray-800 border-4 border-gray-600' : 'bg-gray-100 border-4 border-gray-300')
+//               }`}>
+//                 <div className="text-center">
+//                   <div className={`text-3xl font-bold font-mono ${selectedSignal.value 
+//                     ? (isDarkMode ? 'text-green-400' : 'text-green-600')
+//                     : (isDarkMode ? 'text-gray-400' : 'text-gray-600')
+//                   }`}>
+//                     {selectedSignal.value ? '1' : '0'}
+//                   </div>
+//                   <div className={`text-sm font-medium mt-2 ${selectedSignal.value 
+//                     ? (isDarkMode ? 'text-green-400' : 'text-green-600')
+//                     : (isDarkMode ? 'text-gray-400' : 'text-gray-600')
+//                   }`}>
+//                     {status}
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+            
+//             {/* Signal Information */}
+//             <div className="space-y-4">
+//               <div>
+//                 <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
+//                   SIGNAL NAME
+//                 </div>
+//                 <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+//                   {formatName(selectedSignal.tag || 'Untagged')}
+//                 </div>
+//               </div>
+              
+//               <div className="grid grid-cols-2 gap-4">
+//                 <div>
+//                   <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
+//                     ADDRESS
+//                   </div>
+//                   <div className={`font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+//                     {formatAddress(selectedSignal.address)}
+//                   </div>
+//                 </div>
+                
+//                 <div>
+//                   <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
+//                     TYPE
+//                   </div>
+//                   <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+//                     type === 'INPUT' 
+//                       ? (isDarkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-700')
+//                       : (isDarkMode ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-700')
+//                   }`}>
+//                     {type}
+//                   </div>
+//                 </div>
+//               </div>
+              
+//               <div>
+//                 <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-1`}>
+//                   DESCRIPTION
+//                 </div>
+//                 <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                   {selectedSignal.description || 'No description available'}
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+          
+//           {/* Footer */}
+//           <div className={`p-6 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+//             <div className="flex justify-end">
+//               <button
+//                 onClick={() => setSelectedSignal(null)}
+//                 className={`px-6 py-2 rounded-lg font-medium ${isDarkMode 
+//                   ? 'bg-gray-700 hover:bg-gray-600 text-white' 
+//                   : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+//                 }`}
+//               >
+//                 Close
+//               </button>
+//             </div>
+//           </div>
+//         </div>
 //       </div>
-//     </div>
-//   );
-// }
+//     );
+//   };
 
-// /* ===== STATUS PANEL ===== */
-// function StatusPanel({ title, tags, data }) {
 //   return (
-//     <div style={{ flex: 1 }}>
-//       <h3>{title}</h3>
+//     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
+//       {/* Main Container */}
+//       <div className="max-w-7xl mx-auto px-4 py-6">
+        
+//         {/* Header Section */}
+//         <div className="mb-8">
+//           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+//             {/* Title and Status */}
+//             <div className="flex items-start space-x-4">
+//               <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg`}>
+//                 <div className="flex items-center space-x-4">
+//                   <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+//                   <div>
+//                     <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+//                       Digital I/O Monitor
+//                     </h1>
+//                     <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+//                       Real-time binary signals monitoring
+//                     </p>
+//                   </div>
+//                 </div>
+//               </div>
+              
+//               {/* Connection Status */}
+//               <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg`}>
+//                 <div className="text-center">
+//                   <div className={`text-xs font-semibold uppercase tracking-wider mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+//                     Connection
+//                   </div>
+//                   <div className={`text-lg font-bold ${connected ? (isDarkMode ? 'text-green-400' : 'text-green-600') : (isDarkMode ? 'text-red-400' : 'text-red-600')}`}>
+//                     {connected ? 'LIVE' : 'OFFLINE'}
+//                   </div>
+//                   <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+//                     Last update: {formatTime(lastUpdate)}
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
 
-//       <table style={{ width: "100%", borderCollapse: "collapse" }}>
-//         <thead>
-//           <tr>
-//             <th style={th}>Tag</th>
-//             <th style={th}>Status</th>
-//           </tr>
-//         </thead>
+//             {/* Theme Toggle and Controls */}
+//             <div className="flex items-center space-x-4">
+//               <button
+//                 onClick={toggleTheme}
+//                 className={`p-3 rounded-xl ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-100'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg transition-all duration-300`}
+//                 aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+//               >
+//                 {isDarkMode ? (
+//                   <div className="w-5 h-5">
+//                     <div className="relative w-full h-full">
+//                       <div className="absolute inset-0 bg-yellow-300 rounded-full"></div>
+//                       <div className="absolute top-1 left-1 w-3 h-3 bg-gray-900 rounded-full"></div>
+//                     </div>
+//                   </div>
+//                 ) : (
+//                   <div className="w-5 h-5">
+//                     <div className="relative w-full h-full">
+//                       <div className="absolute inset-0 bg-gray-700 rounded-full"></div>
+//                       <div className="absolute top-1 left-1 w-3 h-3 bg-gray-900 rounded-full"></div>
+//                     </div>
+//                   </div>
+//                 )}
+//               </button>
+              
+//               <div className={`px-4 py-3 rounded-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg`}>
+//                 <div className="text-center">
+//                   <div className={`text-xs font-semibold uppercase tracking-wider mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+//                     Total Signals
+//                   </div>
+//                   <div className={`text-2xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+//                     {totalSignals}
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
 
-//         <tbody>
-//           {tags.map((tag) => {
-//             const value = data[tag];
-//             const isOn = value === true;
+//           {/* Statistics Grid */}
+//           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+//             {[
+//               { label: "Digital Inputs", value: inputCount, color: "blue", icon: "I" },
+//               { label: "Digital Outputs", value: outputCount, color: "purple", icon: "O" },
+//               { label: "Active Signals", value: activeCount, color: "green", icon: "✓" },
+//               { label: "Inactive Signals", value: inactiveCount, color: "gray", icon: "○" },
+//             ].map((stat, index) => (
+//               <div
+//                 key={index}
+//                 className={`p-5 rounded-2xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg hover:shadow-xl transition-shadow duration-300`}
+//               >
+//                 <div className="flex items-center justify-between">
+//                   <div>
+//                     <div className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+//                       {stat.label}
+//                     </div>
+//                     <div className={`text-2xl font-bold ${isDarkMode ? `text-${stat.color}-400` : `text-${stat.color}-600`}`}>
+//                       {stat.value}
+//                     </div>
+//                   </div>
+//                   <div className={`text-2xl font-bold ${isDarkMode ? `text-${stat.color}-400` : `text-${stat.color}-600`}`}>
+//                     {stat.icon}
+//                   </div>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
 
-//             return (
-//               <tr key={tag}>
-//                 <td style={td}>{tag}</td>
-//                 <td
-//                   style={{
-//                     ...td,
-//                     backgroundColor: isOn ? "#1f7a1f" : "#7a1f1f",
-//                     color: "#fff",
-//                     fontWeight: "bold",
-//                     textAlign: "center",
-//                   }}
-//                 >
-//                   {isOn ? "ON" : "OFF"}
-//                 </td>
-//               </tr>
-//             );
-//           })}
-//         </tbody>
-//       </table>
+//         {/* Controls Section */}
+//         <div className={`mb-8 p-6 rounded-2xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg`}>
+//           <div className="flex flex-col lg:flex-row gap-4">
+//             {/* Tab Selection */}
+//             <div className="flex space-x-2">
+//               <button
+//                 onClick={() => setActiveTab("inputs")}
+//                 className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+//                   activeTab === "inputs"
+//                     ? isDarkMode
+//                       ? "bg-blue-600 text-white border border-blue-500 shadow-lg"
+//                       : "bg-blue-600 text-white border border-blue-500 shadow-lg"
+//                     : isDarkMode
+//                       ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+//                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+//                 }`}
+//               >
+//                 DIGITAL INPUTS
+//               </button>
+//               <button
+//                 onClick={() => setActiveTab("outputs")}
+//                 className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+//                   activeTab === "outputs"
+//                     ? isDarkMode
+//                       ? "bg-purple-600 text-white border border-purple-500 shadow-lg"
+//                       : "bg-purple-600 text-white border border-purple-500 shadow-lg"
+//                     : isDarkMode
+//                       ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+//                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+//                 }`}
+//               >
+//                 DIGITAL OUTPUTS
+//               </button>
+//             </div>
+
+//             {/* View Mode Toggle */}
+//             <div className="flex space-x-2 lg:ml-auto">
+//               <button
+//                 onClick={() => setViewMode("grid")}
+//                 className={`px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+//                   viewMode === "grid"
+//                     ? isDarkMode
+//                       ? "bg-gray-700 text-white border border-gray-600"
+//                       : "bg-gray-300 text-gray-800 border border-gray-400"
+//                     : isDarkMode
+//                       ? "bg-gray-800 text-gray-400 hover:bg-gray-700"
+//                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+//                 }`}
+//               >
+//                 <div className="flex items-center space-x-2">
+//                   <div className="w-4 h-4 grid grid-cols-2 gap-0.5">
+//                     <div className={`${viewMode === 'grid' ? (isDarkMode ? 'bg-gray-300' : 'bg-gray-700') : (isDarkMode ? 'bg-gray-600' : 'bg-gray-400')}`}></div>
+//                     <div className={`${viewMode === 'grid' ? (isDarkMode ? 'bg-gray-300' : 'bg-gray-700') : (isDarkMode ? 'bg-gray-600' : 'bg-gray-400')}`}></div>
+//                     <div className={`${viewMode === 'grid' ? (isDarkMode ? 'bg-gray-300' : 'bg-gray-700') : (isDarkMode ? 'bg-gray-600' : 'bg-gray-400')}`}></div>
+//                     <div className={`${viewMode === 'grid' ? (isDarkMode ? 'bg-gray-300' : 'bg-gray-700') : (isDarkMode ? 'bg-gray-600' : 'bg-gray-400')}`}></div>
+//                   </div>
+//                   <span>Grid</span>
+//                 </div>
+//               </button>
+//               <button
+//                 onClick={() => setViewMode("table")}
+//                 className={`px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+//                   viewMode === "table"
+//                     ? isDarkMode
+//                       ? "bg-gray-700 text-white border border-gray-600"
+//                       : "bg-gray-300 text-gray-800 border border-gray-400"
+//                     : isDarkMode
+//                       ? "bg-gray-800 text-gray-400 hover:bg-gray-700"
+//                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+//                 }`}
+//               >
+//                 <div className="flex items-center space-x-2">
+//                   <div className="w-4 h-4">
+//                     <div className={`border ${viewMode === 'table' ? (isDarkMode ? 'border-gray-300' : 'border-gray-700') : (isDarkMode ? 'border-gray-600' : 'border-gray-400')} h-full`}>
+//                       <div className={`${viewMode === 'table' ? (isDarkMode ? 'bg-gray-300' : 'bg-gray-700') : (isDarkMode ? 'bg-gray-600' : 'bg-gray-400')} h-1`}></div>
+//                     </div>
+//                   </div>
+//                   <span>Table</span>
+//                 </div>
+//               </button>
+//             </div>
+
+//             {/* Search */}
+//             <div className="flex-1 min-w-[300px]">
+//               <div className="relative">
+//                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+//                   <svg className={`w-5 h-5 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+//                   </svg>
+//                 </div>
+//                 <input
+//                   type="text"
+//                   placeholder="Search signals by tag or address..."
+//                   value={searchTerm}
+//                   onChange={(e) => setSearchTerm(e.target.value)}
+//                   className={`w-full pl-10 pr-4 py-3 rounded-xl ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'} border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Content Section */}
+//         <div className="mb-8">
+//           <div className="flex items-center justify-between mb-6">
+//             <div>
+//               <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-1`}>
+//                 {activeTab === "inputs" ? "Digital Input Signals" : "Digital Output Signals"}
+//               </h2>
+//               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+//                 {filtered.length} signals found • {activeCount} active • {inactiveCount} inactive
+//               </p>
+//             </div>
+//             <div className={`px-4 py-2 rounded-xl ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}>
+//               <div className="text-sm font-medium">
+//                 View: <span className="font-bold">{viewMode.toUpperCase()}</span>
+//               </div>
+//             </div>
+//           </div>
+
+//           {viewMode === "grid" ? (
+//             /* ========== GRID VIEW ========== */
+//             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+//               {filtered.map((s) => {
+//                 const type = getSignalType(s.address, s.tag);
+//                 const isActive = s.value;
+                
+//                 return (
+//                   <div
+//                     key={s.address || s.tag}
+//                     onClick={() => setSelectedSignal(s)}
+//                     className={`p-5 rounded-2xl border cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl ${
+//                       isActive
+//                         ? isDarkMode
+//                           ? "bg-gradient-to-br from-green-900/20 to-green-900/5 border-green-700/50 hover:border-green-600"
+//                           : "bg-gradient-to-br from-green-50 to-white border-green-300 hover:border-green-400"
+//                         : isDarkMode
+//                           ? "bg-gray-800 border-gray-700 hover:border-gray-600"
+//                           : "bg-white border-gray-300 hover:border-gray-400"
+//                     }`}
+//                   >
+//                     {/* Header */}
+//                     <div className="flex items-start justify-between mb-4">
+//                       <div>
+//                         <div className={`text-xs font-semibold uppercase tracking-wider mb-1 ${
+//                           type === 'INPUT'
+//                             ? isDarkMode ? "text-blue-400" : "text-blue-600"
+//                             : isDarkMode ? "text-purple-400" : "text-purple-600"
+//                         }`}>
+//                           {type}
+//                         </div>
+//                         <div className={`text-lg font-bold truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+//                           {formatName(s.tag || 'Untagged')}
+//                         </div>
+//                       </div>
+//                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+//                         isActive
+//                           ? isDarkMode ? "bg-green-900/30 border border-green-700" : "bg-green-100 border border-green-300"
+//                           : isDarkMode ? "bg-gray-700 border border-gray-600" : "bg-gray-200 border border-gray-300"
+//                       }`}>
+//                         <span className={`text-sm font-bold ${isActive ? (isDarkMode ? "text-green-400" : "text-green-600") : (isDarkMode ? "text-gray-400" : "text-gray-600")}`}>
+//                           {s.value ? '1' : '0'}
+//                         </span>
+//                       </div>
+//                     </div>
+
+//                     {/* Address */}
+//                     <div className={`text-sm font-mono mb-4 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+//                       {formatAddress(s.address)}
+//                     </div>
+
+//                     {/* Status Bar */}
+//                     <div className="flex items-center justify-between">
+//                       <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+//                         isActive
+//                           ? isDarkMode ? "bg-green-900/30 text-green-300" : "bg-green-100 text-green-700"
+//                           : isDarkMode ? "bg-gray-700 text-gray-400" : "bg-gray-200 text-gray-600"
+//                       }`}>
+//                         {isActive ? 'ACTIVE' : 'INACTIVE'}
+//                       </div>
+//                       <div className="flex items-center space-x-1">
+//                         <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`}></div>
+//                         <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+//                           {isActive ? 'Live' : 'Idle'}
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           ) : (
+//             /* ========== TABLE VIEW ========== */
+//             <div className={`rounded-2xl border overflow-hidden ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'} shadow-lg`}>
+//               <div className="overflow-x-auto">
+//                 <table className="w-full">
+//                   <thead className={isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}>
+//                     <tr>
+//                       <th className={`p-4 text-left font-semibold text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                         Signal
+//                       </th>
+//                       <th className={`p-4 text-left font-semibold text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                         Address
+//                       </th>
+//                       <th className={`p-4 text-left font-semibold text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                         Type
+//                       </th>
+//                       <th className={`p-4 text-left font-semibold text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                         Status
+//                       </th>
+//                       <th className={`p-4 text-left font-semibold text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                         Value
+//                       </th>
+//                       <th className={`p-4 text-left font-semibold text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+//                         Actions
+//                       </th>
+//                     </tr>
+//                   </thead>
+//                   <tbody>
+//                     {filtered.map((s) => {
+//                       const type = getSignalType(s.address, s.tag);
+//                       const isActive = s.value;
+                      
+//                       return (
+//                         <tr
+//                           key={s.address || s.tag}
+//                           className={`border-t ${isDarkMode ? 'border-gray-700 hover:bg-gray-750' : 'border-gray-200 hover:bg-gray-50'}`}
+//                         >
+//                           <td className="p-4">
+//                             <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+//                               {formatName(s.tag || 'Untagged')}
+//                             </div>
+//                           </td>
+//                           <td className="p-4">
+//                             <div className={`font-mono text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+//                               {formatAddress(s.address)}
+//                             </div>
+//                           </td>
+//                           <td className="p-4">
+//                             <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+//                               type === 'INPUT'
+//                                 ? isDarkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-700'
+//                                 : isDarkMode ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-700'
+//                             }`}>
+//                               {type}
+//                             </div>
+//                           </td>
+//                           <td className="p-4">
+//                             <div className="flex items-center space-x-2">
+//                               <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`}></div>
+//                               <span className={`font-medium ${isActive ? (isDarkMode ? 'text-green-400' : 'text-green-600') : (isDarkMode ? 'text-gray-400' : 'text-gray-600')}`}>
+//                                 {isActive ? 'ACTIVE' : 'INACTIVE'}
+//                               </span>
+//                             </div>
+//                           </td>
+//                           <td className="p-4">
+//                             <div className={`text-xl font-bold font-mono ${isActive ? (isDarkMode ? 'text-green-400' : 'text-green-600') : (isDarkMode ? 'text-gray-500' : 'text-gray-600')}`}>
+//                               {s.value ? '1' : '0'}
+//                             </div>
+//                           </td>
+//                           <td className="p-4">
+//                             <button
+//                               onClick={() => setSelectedSignal(s)}
+//                               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+//                                 isDarkMode
+//                                   ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+//                                   : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+//                               }`}
+//                             >
+//                               Details
+//                             </button>
+//                           </td>
+//                         </tr>
+//                       );
+//                     })}
+//                   </tbody>
+//                 </table>
+//               </div>
+              
+//               {filtered.length === 0 && (
+//                 <div className="p-12 text-center">
+//                   <div className={`text-2xl mb-3 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>🔍</div>
+//                   <div className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+//                     No signals found
+//                   </div>
+//                   <div className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+//                     Try adjusting your search or check the connection
+//                   </div>
+//                 </div>
+//               )}
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Footer */}
+//         <div className={`p-6 rounded-2xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} shadow-lg`}>
+//           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+//             {/* Legend */}
+//             <div className="flex flex-wrap gap-4">
+//               {[
+//                 { label: "Active Signal", color: "green" },
+//                 { label: "Inactive Signal", color: "gray" },
+//                 { label: "Digital Input", color: "blue" },
+//                 { label: "Digital Output", color: "purple" },
+//               ].map((item, index) => (
+//                 <div key={index} className="flex items-center space-x-2">
+//                   <div className={`w-3 h-3 rounded-full ${item.color === 'green' ? 'bg-green-500' : item.color === 'blue' ? 'bg-blue-500' : item.color === 'purple' ? 'bg-purple-500' : 'bg-gray-500'}`}></div>
+//                   <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.label}</span>
+//                 </div>
+//               ))}
+//             </div>
+
+//             {/* System Info */}
+//             <div className={`text-sm text-center md:text-right ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+//               <div className="font-medium mb-1">Binary I/O Monitoring System</div>
+//               <div>v1.0 • Connected: {connected ? 'Yes' : 'No'} • Last Update: {formatTime(lastUpdate)}</div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Signal Details Modal */}
+//       <SignalDetailsModal />
 //     </div>
 //   );
 // }
 
-// /* ===== STYLES ===== */
-// const th = {
-//   border: "1px solid #444",
-//   padding: "8px",
-//   textAlign: "left",
-// };
 
-// const td = {
-//   border: "1px solid #444",
-//   padding: "8px",
-// };
